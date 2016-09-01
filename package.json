@@ -24,7 +24,8 @@
   "homepage": "https://github.com/CoordinatedTortoises/coordinatedtortoises#readme",
   "dependencies": {
     "orm": "^3.1.0",
-    "pg": "^6.1.0"
+    "pg": "^6.1.0",
+    "rethinkdbdash": "^2.3.21"
   },
   "devDependencies": {
     "chai": "^3.5.0",
