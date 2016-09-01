@@ -28,7 +28,8 @@
     "express": "^4.13.2",
     "morgan": "^1.6.1",
     "body-parser": "^1.14.1",
-    "method-override": "^2.3.5"
+    "method-override": "^2.3.5",
+    "rethinkdbdash": "^2.3.21"
   },
   "devDependencies": {
     "chai": "^3.5.0",
