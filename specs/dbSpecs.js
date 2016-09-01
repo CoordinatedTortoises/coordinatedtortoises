@@ -4,10 +4,12 @@ var m = require('mocha');
 var chai = require('chai');
 var assert = require('assert');
 
-// describe('test', function(){
-//   it('should run this test', function(){
-//     assert.equal(true, true);
+// describe('Database', function(){
+//   it('should not be undefined', function(){
+//     assert.equal(Boolean(db.db), true);
 //   });
+//   it('should have a preference table', function(){
+//     assert.equal(Boolean(db.db.models.preferences) && Boolean(db.preferences), true);
+//   })
 // });
 
-console.log(db.db)
