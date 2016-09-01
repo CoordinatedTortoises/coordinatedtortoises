@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/CoordinatedTortoises/coordinatedtortoises/issues"
   },
-  "homepage": "https://github.com/CoordinatedTortoises/coordinatedtortoises#readme"
+  "homepage": "https://github.com/CoordinatedTortoises/coordinatedtortoises#readme",
+  "dependencies": {
+    "ws": "^1.1.1"
+  }
 }
