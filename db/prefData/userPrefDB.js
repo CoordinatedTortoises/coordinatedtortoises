@@ -1,5 +1,9 @@
 var orm = require('orm');
 
+//Install postgreSQL with brew install postgresql
+//Start postgreSQL with brew services start posgresql
+//To get access, use psql
+
 // https://github.com/dresende/node-orm2
 // https://launchschool.com/blog/how-to-install-postgresql-on-a-mac
 var database = 'userPrefs';
@@ -18,11 +22,7 @@ db.on('connect', function(err){
     id: { type: 'serial', key: true },
     preference: Buffer,
     accountInfo: Object
-  }).sync(function(){
-    module.exports.preferences = preferences;
-    findAll(preferences, function(err, res){
-    });
-    });
+  }).sync();
 });
 
 var findAll = function(model, callback){
