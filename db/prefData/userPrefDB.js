@@ -19,12 +19,10 @@ db.on('connect', function(err){
     preference: Buffer,
     accountInfo: Object
   }).sync(function(){
-    findAll(preferences, function(err, results){
-      console.log(err, results);
+    module.exports.preferences = preferences;
+    findAll(preferences, function(err, res){
     });
-  });
-
-
+    });
 });
 
 var findAll = function(model, callback){
@@ -33,5 +31,10 @@ var findAll = function(model, callback){
   });
 };
 
+var add = function(model, options, callback){
+  model.create(options, callback);
+}
+
 module.exports.db = db;
 module.exports.findAll = findAll;
+module.exports.add = add;
