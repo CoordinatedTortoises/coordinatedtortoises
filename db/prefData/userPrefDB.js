@@ -32,3 +32,6 @@ var findAll = function(model, callback){
     return callback(err, results);
   });
 };
+
+module.exports.db = db;
+module.exports.findAll = findAll;
