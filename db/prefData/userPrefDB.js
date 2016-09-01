@@ -14,10 +14,21 @@ var opts = {
 var db = orm.connect(opts);
 
 db.on('connect', function(err){
-  var preference = db.define("preference", {
+  var preferences = db.define("preferences", {
     id: { type: 'serial', key: true },
     preference: Buffer,
     accountInfo: Object
-  }).sync();
+  }).sync(function(){
+    findAll(preferences, function(err, results){
+      console.log(err, results);
+    });
+  });
+
+
 });
 
+var findAll = function(model, callback){
+  model.find({}, function(err, results){
+    return callback(err, results);
+  });
+};
