@@ -2,5 +2,9 @@ node_modules/
 bower_components/
 *.log
 
+
+## Client side compiled code
+Public/compiled
+
 build/
 dist/
