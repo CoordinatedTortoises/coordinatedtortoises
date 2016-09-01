@@ -1,4 +1,3 @@
-var pg = require('pg');
 var orm = require('orm');
 
 // https://github.com/dresende/node-orm2
@@ -16,10 +15,17 @@ var config = {
 orm.connect("postgres://def:default@localhost/userPrefs", function(err, db){
   console.log(err);
   console.log(db);
+  var preference = db.define("preference", {
+    id: { type: 'serial', key: true },
+    preference: Buffer,
+    accountInfo: Object
+  });
+  db.sync(function(err){
+    preference.create({ id: 1}, function(err){
+      preference.exists({id:1}, function(err, prefs){
+        console.log(prefs);
+      })
+    });
+  });
 });
-// var client = new pg.Client(config);
 
-// client.connect(function(err){
-//   console.log(err);
-// });
-// console.log('test');
