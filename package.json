@@ -1,0 +1,25 @@
+{
+  "name": "coordinatedtortoises",
+  "version": "0.0.0",
+  "description": "A personalized cryptocurrency stock ticker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CoordinatedTortoises/coordinatedtortoises.git"
+  },
+  "keywords": [
+    "crypto",
+    "doge",
+    "much",
+    "coin"
+  ],
+  "author": "Nick Olszowy, Pete Herbert, Clarabelle Cheng-Yue, Julian Knodt",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/CoordinatedTortoises/coordinatedtortoises/issues"
+  },
+  "homepage": "https://github.com/CoordinatedTortoises/coordinatedtortoises#readme"
+}
