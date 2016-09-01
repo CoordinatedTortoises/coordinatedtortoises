@@ -18,27 +18,36 @@ Once the project moves into development, the press release can be used as a touc
  
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  Bits of Blocks (or BoB for short)
 
 ## Sub-Heading ##
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  Anyone who wants to observe and/or invest in cryptocurrency stats and transactions.
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  A cryptocurrency ticker that shows stats of specific cryptocurrencies in customized user accounts
 
 ## Problem ##
   > Describe the problem your product solves.
+  Too many cryptocurrency markets. Need one place to observe all.
 
 ## Solution ##
   > Describe how your product elegantly solves the problem.
+  Product is a personalized tool to inform users of cryptocurrency markets.
 
 ## Quote from You ##
   > A quote from a spokesperson in your company.
+  This product will make your life better.
 
 ## How to Get Started ##
   > Describe how easy it is to get started.
+  Sign up. Add markets to watch. Observe.
 
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  I made a lot of money.
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.
+Sign up now~

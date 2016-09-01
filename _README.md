@@ -4,9 +4,9 @@
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Nick Olszowy
+  - __Scrum Master__: Clarabelle Cheng-Yue
+  - __Development Team Members__: Julian Knodt, Peter Herbert
 
 ## Table of Contents
 
