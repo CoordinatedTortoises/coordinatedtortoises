@@ -18,8 +18,7 @@ rdash.dbList().contains('currencyData')
 }).run();
 rdash.tableList().contains('bitcoinData')
   .do(function(exists){
-    console.log(exists);
-    return rdash.branch(exists, {tables_created: 0}, rdash.tableCreate('bitcoinData', {
-      durability: 'soft'
-    }));
-  }).run(console.log);
+  return rdash.branch(exists, {tables_created: 0}, rdash.tableCreate('bitcoinData', {
+    durability: 'soft'
+  }));
+}).run();

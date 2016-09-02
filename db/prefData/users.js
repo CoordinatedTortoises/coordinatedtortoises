@@ -3,7 +3,6 @@ module.exports = function(db){
   return db.define('user', {
   id: { type: 'serial', key: true },
   username: String,
-  password: String,
-  preference: {}
+  password: String
   }).sync();
 }
