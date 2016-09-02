@@ -35,9 +35,9 @@ var findAll = function(model, callback){
   });
 };
 
-var add = function(model, options, callback){
+var add = function(model, options, callback) {
   model.create(options, callback);
-}
+};
 
 module.exports.users = users;
 module.exports.preferences = preferences;
