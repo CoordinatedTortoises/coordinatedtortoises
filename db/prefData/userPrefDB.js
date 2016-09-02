@@ -29,6 +29,9 @@ var users = usersModel(db);
 
 var findAll = function(model, callback){
   model.find({}, function(err, results){
+    //results is something called a cursor.
+    //Essentially an array,
+    //but you can cast it to an array with results.toArray();
     return callback(err, results);
   });
 };
