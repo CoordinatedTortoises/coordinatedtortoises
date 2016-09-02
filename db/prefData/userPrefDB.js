@@ -6,7 +6,7 @@
 // https://launchschool.com/blog/how-to-install-postgresql-on-a-mac
 
 var orm = require('orm');
-var preferences = require('./preferences.js')
+var preferences = require('./preferences.js');
 
 var database = 'userPrefs';
 
@@ -14,7 +14,7 @@ var opts = {
   user: 'def',
   database: database,
   protocol: 'postgres',
-  query:    {pool: true}
+  query: { pool: true }
 };
 
 var db = orm.connect(opts);
@@ -24,15 +24,15 @@ var prefs = preferences(db);
 // });
 
 
-var findAll = function(model, callback){
-  model.find({}, function(err, results){
+var findAll = function(model, callback) {
+  model.find({}, function(err, results) {
     return callback(err, results);
   });
 };
 
-var add = function(model, options, callback){
+var add = function(model, options, callback) {
   model.create(options, callback);
-}
+};
 
 module.exports.preferences = prefs;
 module.exports.db = db;
