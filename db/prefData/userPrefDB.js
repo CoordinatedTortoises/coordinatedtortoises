@@ -18,11 +18,10 @@ var opts = {
 };
 
 var db = orm.connect(opts);
+db.on('connect', function(err){
+  console.log('connected to database');
+});
 var prefs = preferences(db);
-// db.on('connect', function(err){
-//   console.log('connected to database');
-// });
-
 
 var findAll = function(model, callback) {
   model.find({}, function(err, results) {
