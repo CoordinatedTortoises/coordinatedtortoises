@@ -4,8 +4,9 @@
 
 // https://github.com/dresende/node-orm2
 // https://launchschool.com/blog/how-to-install-postgresql-on-a-mac
-
-var url = require('./config/psqlconfig.js')
+if(!process.env.ci){
+  var url = require('./config/psqlconfig.js')
+}
 var orm = require('orm');
 var preferencesModel = require('./preferences.js')
 var usersModel = require('./users.js');
