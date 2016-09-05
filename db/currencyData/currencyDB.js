@@ -20,6 +20,22 @@ rdash.dbList().contains('currencyData')
 rdash.tableList().contains('bitcoinData')
   .do(function(exists){
   return rdash.branch(exists, {tables_created: 0}, rdash.tableCreate('bitcoinData', {
+    primaryKey: 'id',
     durability: 'soft'
   }));
 }).run();
+
+
+
+module.exports.readChanges = function(){
+  r.table('bitcoinData').changes().run(function(err, cursor) {
+    cursor.each(console.log);
+  });
+}
+
+module.exports.streamData = function(stream){
+  stream.on('data', function(data){
+    console.log(data);
+    // r.table('bitcoinData')
+  })
+}
