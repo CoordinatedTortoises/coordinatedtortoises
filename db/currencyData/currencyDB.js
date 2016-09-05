@@ -34,6 +34,12 @@ var readChanges = function(callback){
   });
 };
 
+var readLimitedChanges = function(limit, orderBy, callback){
+  rdash.table('bitcoinData').changes().limit(limit).orderBy(orderBy).run({cursor: true}, function(err, cursor){
+    cursor.each(callback);
+  });
+}
+
 var getAll = function(tableName, callback){
   rdash.table(tableName).run(function(res, err){
     if(callback){      
