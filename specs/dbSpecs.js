@@ -22,4 +22,4 @@
 // });
 
 
-console.log(process.env.testingUrl);
+console.log(CIRCLETESTINGURL);
