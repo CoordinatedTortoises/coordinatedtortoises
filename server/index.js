@@ -24,20 +24,23 @@ app.post('/', function(req, res) {
 //find all users, send them back
 app.get('/users', function(req, res) {
   //get all users from db
-  findAll(prefs, function(err, users) {
+  findAll(prefs, function(err, userPrefs) {
     if (err) {
       console.log('Oops! error: ', err);
     } else {
-      res.status(200).send(JSON.stringify(users));
+      console.log('Got all user prefs.');
+      res.status(200).send(JSON.stringify(userPrefs));
     }
   });
 });
 
 //new user submitted, add new user to db
 app.post('/users', function(req, res) {
+  //add(model, options, callback)
   add(prefs, req.body, function() {
     //let console know new user was added
-    res.send('New user added: ' + req.body);
+    console.log('New user added: ' + req.body);
+    res.json(req.body);
   });
 });
 
