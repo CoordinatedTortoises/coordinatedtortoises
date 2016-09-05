@@ -1,7 +1,16 @@
 // var db = require('../db/prefData/userPrefDB'); 
+// var Sequelize = require('sequelize');
+// var chai = require('chai');
+// var assert = require('assert');
+// var testingUrl;
+// var sequelize = new Sequelize(process.env.Url || require('../db/prefData/config/psqlconfig.js'),  {
+//   dialect: 'postgres',
+//   dialectOptions: {
+//     ssl: true
+//   }
+// });
 
-var chai = require('chai');
-var assert = require('assert');
+
 
 // describe('User Preferences Database', function(){
 //   it('should not be undefined', function(){
@@ -12,3 +21,5 @@ var assert = require('assert');
 //   })
 // });
 
+
+console.log(process.env.testingUrl);
