@@ -71,16 +71,6 @@ BitCoinWebSocket.prototype.send = function(data, options, cb) {
   WebSocket.prototype.send.call(this, data, options, cb);
 };
 
-var ws = new BitCoinWebSocket(bcSocketUrl);
-
-ws.open(ws.options.newTransactions, function() {
-  console.log(ws.state());
-});
-
-ws.getData(function(data, flags) {
-  console.log(data);
-});
-
 module.exports = {
   ws: BitCoinWebSocket,
   url: bcSocketUrl,
