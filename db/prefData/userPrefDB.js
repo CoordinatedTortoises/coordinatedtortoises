@@ -38,8 +38,10 @@ var users = usersModel(sequelize);
 preferences.belongsTo(users);
 users.hasOne(preferences);
 
-// add(users, {id:1, username:'steve', password:'pass'}, console.log);
-// findAll(users, console.log);
+// add(users, {id:3, username:'stevo', password:'pass'}, console.log);
+// findAll(users, function(users){
+//   console.log(users[1].dataValues);
+// });
 // deleteAll(users, console.log);
 
 
