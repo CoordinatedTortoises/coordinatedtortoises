@@ -1,6 +1,7 @@
-class App extends React.component {
+class App extends React.Component {
   constructor(props) {
 
+    console.log(props);
     //Short hand for calling React.component.call(props)
     super(props);
 
@@ -36,11 +37,11 @@ class App extends React.component {
 
           //Props are given as attributes
       <div>
-        <div class="col-md-4">    
+        <div className="col-md-4">    
           <NavBar logout={this.logout} savePrefs={this.savePrefs} />
         </div>
-        <div class="col-md-8">    
-          <Main logout={this.logout} savePrefs={this.savePrefs} />
+        <div className="col-md-8">    
+          <Main />
         </div>
       </div>
 
