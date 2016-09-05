@@ -26,28 +26,39 @@ rdash.tableList().contains('bitcoinData')
 }).run();
 
 
-var readChanges = function(){
+var readChanges = function(callback){
   rdash.table('bitcoinData').changes().run({cursor: true}, function(err, cursor) {
-    cursor.each(console.log);
+    if(callback){      
+      cursor.each(callback);
+    }
   });
 };
 
-var addData = function(data){
+var getAll = function(tableName, callback){
+  rdash.table(tableName).run(function(res, err){
+    if(callback){      
+      callback(res, err);
+    }
+  });
+}
+
+var addData = function(data, callback){
   rdash.table('bitcoinData').insert(data).run(function(err, dbResp){
-    console.log(dbResp);
+    if(callback){
+      callback(dbResp);
+    }
   });
 };
 
-var deleteAll = function(){
+var deleteAll = function(callback){
   rdash.table('bitcoinData').delete().run(function(err, data){
-    console.log(data);
+    if(callback){      
+      callback(data);
+    }
   });
 };
 
-
-module.exports.addData = addData;
-module.exports.readChanges = readChanges;
-module.exports.pipeStream = function(stream){
+var pipeStream = function(stream){
   var bitcoinTable = rdash.table('bitcoinData').toStream({writable: true})
   .on('error', console.log)
   .pipe(stream)
@@ -57,10 +68,23 @@ module.exports.pipeStream = function(stream){
     rdash.getPool().drain();
   });
 };
-module.exports.reql = rdash;
-module.exports.deleteAll = deleteAll;
 
-readChanges();
-addData({id: 950, data: {test: 'test'}});
-deleteAll();
+var getTableList = function(callback){
+  rdash.tableList().run(function(err, res){
+    callback(err, res);
+  });
+}
 
+module.exports = {
+  addData: addData,
+  readChanges: readChanges,
+  pipeStream: pipeStream,
+  deleteAll: deleteAll,
+  getAll: getAll,
+  reql: rdash,
+  getTableList: getTableList
+};
+// addData({id: 950, data: {test: 'test'}}, console.log);
+// getAll(console.lo g);
+// readChanges();
+// deleteAll();
