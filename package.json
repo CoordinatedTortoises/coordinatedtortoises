@@ -23,13 +23,14 @@
   },
   "homepage": "https://github.com/CoordinatedTortoises/coordinatedtortoises#readme",
   "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.2",
+    "method-override": "^2.3.5",
+    "morgan": "^1.7.0",
     "orm": "^3.1.0",
     "pg": "^6.1.0",
-    "express": "^4.13.2",
-    "morgan": "^1.6.1",
-    "body-parser": "^1.14.1",
-    "method-override": "^2.3.5",
-    "rethinkdbdash": "^2.3.21"
+    "rethinkdbdash": "^2.3.21",
+    "sequelize": "^3.24.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",

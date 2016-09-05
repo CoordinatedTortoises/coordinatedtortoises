@@ -27,14 +27,20 @@ rdash.tableList().contains('bitcoinData')
 
 
 var readChanges = function(){
-  rdash.table('bitcoinData').changes().run(function(err, cursor) {
+  rdash.table('bitcoinData').changes().run({cursor: true}, function(err, cursor) {
     cursor.each(console.log);
   });
 };
 
 var addData = function(data){
-  rdash.table('bitcoinData').insert(data).run(function(dbResp){
+  rdash.table('bitcoinData').insert(data).run(function(err, dbResp){
     console.log(dbResp);
+  });
+};
+
+var deleteAll = function(){
+  rdash.table('bitcoinData').delete().run(function(err, data){
+    console.log(data);
   });
 };
 
@@ -50,7 +56,11 @@ module.exports.pipeStream = function(stream){
     console.log('stopping pipe to db');
     rdash.getPool().drain();
   });
-}
+};
+module.exports.reql = rdash;
+module.exports.deleteAll = deleteAll;
 
-
+readChanges();
+addData({id: 950, data: {test: 'test'}});
+deleteAll();
 

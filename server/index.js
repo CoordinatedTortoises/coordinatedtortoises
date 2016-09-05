@@ -2,11 +2,11 @@ var express = require('express');
 var morgan = require('morgan');
 var bp = require('body-parser');
 var mo = require('method-override');
-var db = require('../prefData/userPrefDB.js').db;
+var db = require('../db/prefData/userPrefDB.js').db;
 //preferences: id, preference, accountInfo
-var prefs = require('../prefData/userPrefDB.js').preferences;
-var findAll = require('../prefData/userPrefDB.js').findAll;
-var add = require('../prefData/userPrefDB.js').add;
+var prefs = require('../db/prefData/userPrefDB.js').preferences;
+var findAll = require('../db/prefData/userPrefDB.js').findAll;
+var add = require('../db/prefData/userPrefDB.js').add;
 
 //-------- set up ----------//
 var app = express();
