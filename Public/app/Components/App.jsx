@@ -1,13 +1,17 @@
-class App extends React.component {
+class App extends React.Component {
   constructor(props) {
 
+    console.log(props);
     //Short hand for calling React.component.call(props)
     super(props);
 
 
     this.state = {
-      //Put states that change in here
-
+      prefs: {
+        testData: 'blah blah blah',
+        displayBitcoins: true
+      },
+      synced: false
     };
   }
 
@@ -15,9 +19,46 @@ class App extends React.component {
   //render is necessary to display the JSX supplied to the DOM!
   //componenetDidMount is called once for every
 
-  logout() {}
+  synced() {
+    this.setState({
+      synced: true
+    });
 
-  savePrefs() {}
+    setTimeout(3000, function() {
+      this.setState({
+        synced: false
+      });
+    }.bind(this));
+  }
+
+
+  logout(callback) {
+    console.log('Logging out now');
+
+    $.ajax({
+      url: 'http://localhost:3000/logout',
+      method: 'GET',
+      success: (data) => callback(data),
+      error: (error) => console.log('An error occurred!: ', error)
+    });
+  }
+
+  savePrefs(callback) {
+    console.log('Saving prefs now');
+
+    var context = this;
+    debugger;
+
+    $.ajax({
+      url: 'https://localhost:3000/users/preferences',
+      method: 'POST',
+      data: {
+        prefs: JSON.stringify(this.state.prefs)
+      },
+      success: (data) => callback(data),
+      error: (error) => console.log('An error occurred!: ', error)
+    });
+  }
 
   serverReqs() {}
 
@@ -35,12 +76,12 @@ class App extends React.component {
           //Settings for it
 
           //Props are given as attributes
-      <div>
-        <div class="col-md-4">    
-          <NavBar logout={this.logout} savePrefs={this.savePrefs} />
+      <div className="target">
+        <div className="col-md-4">    
+          <NavBar logout={this.logout} savePrefs={this.savePrefs.bind(this)} synced={this.synced.bind(this)} />
         </div>
-        <div class="col-md-8">    
-          <Main logout={this.logout} savePrefs={this.savePrefs} />
+        <div className="col-md-8">    
+          <Main />
         </div>
       </div>
 
