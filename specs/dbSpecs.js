@@ -1,4 +1,4 @@
-// var db = require('../db/prefData/userPrefDB'); 
+var db = require('../db/prefData/userPrefDB'); 
 
 var chai = require('chai');
 var assert = require('assert');
@@ -11,9 +11,3 @@ var assert = require('assert');
 //     assert.equal(Boolean(db.db.models.preferences) && Boolean(db.preferences), true);
 //   })
 // });
-
-// db.findAll(db.preferences, function(err, res){
-//   console.log(err, res);
-//   console.log(JSON.stringify(res));
-// })
-
