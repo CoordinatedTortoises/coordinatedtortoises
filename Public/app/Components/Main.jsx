@@ -2,9 +2,12 @@
 
 //Stateless components don't even have to be declared as a React Component, and ES6 syntax makes them look super clean
 var Main = ({stream}) => (
- <div role="group" aria-label="...">
-   
- </div>
+  <div className="panel panel-primary">
+    <div className="panel-heading"> Current Trading Values</div>
+    <div className="panel-body">
+    </div>
+    <div className="panel-footer">Options:</div>
+  </div>
 );
 
 
