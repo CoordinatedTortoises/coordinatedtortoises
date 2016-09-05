@@ -26,16 +26,31 @@ rdash.tableList().contains('bitcoinData')
 }).run();
 
 
-
-module.exports.readChanges = function(){
-  r.table('bitcoinData').changes().run(function(err, cursor) {
+var readChanges = function(){
+  rdash.table('bitcoinData').changes().run(function(err, cursor) {
     cursor.each(console.log);
+  });
+};
+
+var addData = function(data){
+  rdash.table('bitcoinData').insert(data).run(function(dbResp){
+    console.log(dbResp);
+  });
+};
+
+
+module.exports.addData = addData;
+module.exports.readChanges = readChanges;
+module.exports.pipeStream = function(stream){
+  var bitcoinTable = rdash.table('bitcoinData').toStream({writable: true})
+  .on('error', console.log)
+  .pipe(stream)
+  .on('error', console.log)
+  .on('end', function() {
+    console.log('stopping pipe to db');
+    rdash.getPool().drain();
   });
 }
 
-module.exports.streamData = function(stream){
-  stream.on('data', function(data){
-    console.log(data);
-    // r.table('bitcoinData')
-  })
-}
+
+

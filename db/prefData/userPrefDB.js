@@ -22,6 +22,9 @@ var db = orm.connect(url);
 db.on('connect', function(err){
   console.log('connected to database');
 });
+var preferences = preferencesModel(db);
+var users = usersModel(db);
+
 
 var preferences = preferencesModel(db);
 var users = usersModel(db);
