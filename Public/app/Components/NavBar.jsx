@@ -3,7 +3,7 @@
 //Stateless components don't even have to be declared as a React Component, and ES6 syntax makes them look super clean
 var NavBar = ({logout, savePrefs}) => (
 
-  <div className="panel panel-primary">
+  <div className="panel panel-primary height-full">
     <div className="panel-heading">Crypto Currency Dashboard</div>
     <div className="panel-body">
       <div className="btn-group-vertical" role="group" aria-label="...">

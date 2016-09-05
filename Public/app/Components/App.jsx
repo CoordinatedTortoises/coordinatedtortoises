@@ -36,7 +36,7 @@ class App extends React.Component {
           //Settings for it
 
           //Props are given as attributes
-      <div>
+      <div className="target">
         <div className="col-md-4">    
           <NavBar logout={this.logout} savePrefs={this.savePrefs} />
         </div>
