@@ -12,8 +12,8 @@ var assert = require('assert');
 //   })
 // });
 
-db.findAll(db.preferences, function(err, res){
-  console.log(err, res);
-  console.log(JSON.stringify(res));
-})
+// db.findAll(db.preferences, function(err, res){
+//   console.log(err, res);
+//   console.log(JSON.stringify(res));
+// })
 
