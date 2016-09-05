@@ -1,8 +1,9 @@
 //adds a preference table to postgres db
+var Sequelize = require('Sequelize');
 module.exports = function(db) {
   return db.define('preferences', {
-    id: { type: 'serial', key: true },
-    preference: Buffer,
-    accountInfo: Object
-  }).sync();
+    id: { type: 'serial', primaryKey: true },
+    preference: Sequelize.BLOB,
+    accountInfo: Sequelize.BLOB
+  });
 };

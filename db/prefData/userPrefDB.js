@@ -5,9 +5,15 @@
 // https://github.com/dresende/node-orm2
 // https://launchschool.com/blog/how-to-install-postgresql-on-a-mac
 var url = require('./config/psqlconfig.js')
-var orm = require('orm');
+var Sequelize = require('sequelize');
 var preferencesModel = require('./preferences.js')
 var usersModel = require('./users.js');
+var sequelize = new Sequelize(url,  {
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: true
+  }
+  });
 
 //Localhost settings
 // var database = 'userPrefs';
@@ -18,36 +24,24 @@ var usersModel = require('./users.js');
 //   query:    {pool: true}
 // };
 var findAll = function(model, callback){
-  model.find({}, function(err, res){
-    console.log(err, res);
-  });
-    //results is something called a cursor.
-    //Essentially an array,
-    //but you can cast it to an array with results.toArray();
-};
-
+  model.findAll({}).then(callback);
+}
 var add = function(model, options, callback) {
-  model.create(options, callback);
+  model.findOrCreate({where:options}).then(callback);
 };
 var deleteAll = function(model, callback){
-  model.find({}).remove(callback);
+  model.destroy({where:{}}).then(callback);
 }
+var preferences = preferencesModel(sequelize);
+var users = usersModel(sequelize);
 
+// add(users, {id:1, username:'steve', password:'pass'}, console.log);
+// findAll(users, console.log);
+// deleteAll(users, console.log);
 
-
-var db = orm.connect(url);
-db.on('connect', function(err){
-  console.log('connected to database');
-});
-
-var preferences = preferencesModel(db);
-var users = usersModel(db);
 
 module.exports.users = users;
 module.exports.preferences = preferences;
-module.exports.db = db;
+module.exports.db = sequelize;
 module.exports.findAll = findAll;
 module.exports.add = add;
-
-
-

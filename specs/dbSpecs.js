@@ -11,3 +11,4 @@ var assert = require('assert');
 //     assert.equal(Boolean(db.db.models.preferences) && Boolean(db.preferences), true);
 //   })
 // });
+
