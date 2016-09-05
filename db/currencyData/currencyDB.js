@@ -13,33 +13,32 @@ var rdash = require('rethinkdbdash')({
 
 rdash.dbList().contains('currencyData')
   .do(function(exists) {
-  return rdash.branch(exists, { dbs_created: 0 }, rdash.dbCreate('currencyData'));
+    return rdash.branch(exists, { dbsCreated: 0 }, rdash.dbCreate('currencyData'));
     //Rdash branch checks to see whether the first arg is true, and it returns arg 2 if false, or third arg if it isn't.
-}).run();
+  }).run();
 
 rdash.tableList().contains('bitcoinData')
-  .do(function(exists){
-  return rdash.branch(exists, {tables_created: 0}, rdash.tableCreate('bitcoinData', {
-    primaryKey: 'id',
-    durability: 'soft'
-  }));
-}).run();
+  .do(function(exists) {
+    return rdash.branch(exists, {tablesCreated: 0}, rdash.tableCreate('bitcoinData', {
+      primaryKey: 'id',
+      durability: 'soft'
+    }));
+  }).run();
 
-
-var readChanges = function(){
-  rdash.table('bitcoinData').changes().run({cursor: true}, function(err, cursor) {
+var readChanges = function() {
+  rdash.table('bitcoinData').changes().run(function(err, cursor) {
     cursor.each(console.log);
   });
 };
 
-var addData = function(data){
-  rdash.table('bitcoinData').insert(data).run(function(err, dbResp){
+var addData = function(data) {
+  rdash.table('bitcoinData').insert(data).run(function(dbResp) {
     console.log(dbResp);
   });
 };
 
-var deleteAll = function(){
-  rdash.table('bitcoinData').delete().run(function(err, data){
+var deleteAll = function() {
+  rdash.table('bitcoinData').delete().run(function(err, data) {
     console.log(data);
   });
 };
@@ -47,7 +46,7 @@ var deleteAll = function(){
 
 module.exports.addData = addData;
 module.exports.readChanges = readChanges;
-module.exports.pipeStream = function(stream){
+module.exports.pipeStream = function(stream) {
   var bitcoinTable = rdash.table('bitcoinData').toStream({writable: true})
   .on('error', console.log)
   .pipe(stream)
