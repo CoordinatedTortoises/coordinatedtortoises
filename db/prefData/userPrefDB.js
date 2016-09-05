@@ -35,6 +35,9 @@ var deleteAll = function(model, callback){
 var preferences = preferencesModel(sequelize);
 var users = usersModel(sequelize);
 
+preferences.belongsTo(users);
+users.hasOne(preferences);
+
 // add(users, {id:1, username:'steve', password:'pass'}, console.log);
 // findAll(users, console.log);
 // deleteAll(users, console.log);
