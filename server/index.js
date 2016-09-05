@@ -35,8 +35,9 @@ app.get('/users', function(req, res) {
 
 //new user submitted, add new user to db
 app.post('/users', function(req, res) {
-  add(req.body, options, function() {
-  	
+  add(prefs, req.body, function() {
+    //let console know new user was added
+    res.send('New user added: ' + req.body);
   });
 });
 
