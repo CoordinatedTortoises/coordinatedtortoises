@@ -2,63 +2,87 @@ var WebSocket = require('ws');
 var events = require('events');
 var bcSocketUrl = 'wss://ws.blockchain.info/inv';
 
-var ws = new WebSocket(bcSocketUrl);
+var BitCoinWebSocket = function(url) {
+  WebSocket.call(this, url);
 
-var state = function() {
-
-  var states = {
+  this._states = {
     1: 'CONNECTING',
     2: 'OPEN',
     3: 'CLOSING',
     4: 'CLOSED'
   };
 
-  return states[ws.readyState];
+  this._on = function(msg, args) {
+    WebSocket.prototype.on.call(this, msg, args);
+  };
+
+  this.options = {
+    newTransactions: {"op": "unconfirmed_sub"},
+    newBlocks: {"op": "blocks_sub"},
+    debugOP: {"op": "ping_block"},
+    newestBlock: {"op": "ping_tx"},
+    ping: {"op": "ping"},
+    subscribeToAddress: {"op":"addr_sub", "addr": null}
+  };
+
 };
 
-var openStream = function(options, cb) {
+BitCoinWebSocket.prototype = Object.create(WebSocket.prototype);
+BitCoinWebSocket.prototype.constructor = BitCoinWebSocket;
+
+BitCoinWebSocket.prototype.state = function() {
+
+  return this._states[this.readyState];
+};
+
+BitCoinWebSocket.prototype.open = function(options, cb) {
   options = options || {};
 
-  ws.on('open', function() {
-    ws.send(JSON.stringify(options), {masked: true}, cb);
+  this._on('open', function() {
+    this.send(JSON.stringify(options), {masked: true}, cb);
   });
 };
 
-var closeStream = function(code, data) {
-  ws.close(code, data);
+BitCoinWebSocket.prototype.close = function(code, data) {
+  WebSocket.prototype.close.call(this, code, data);
 };
 
-var getData = function(cb) {
-  ws.on('message', function(data, flags) {
+BitCoinWebSocket.prototype.getData = function(cb) {
+  this._on('message', function(data, flags) {
     cb(data, flags);
   });
 };
 
-var onOpen = function(cb) {
-  ws.on('open', cb);
+BitCoinWebSocket.prototype.onOpen = function(cb) {
+  this._on('open', cb);
 };
 
-var onClose = function(cb) {
-  ws.on('close', cb);
+BitCoinWebSocket.prototype.onClose = function(cb) {
+  this._on('close', cb);
 };
 
-var onError = function(cb) {
-  ws.on('error', cb);
+BitCoinWebSocket.prototype.onError = function(cb) {
+  this._on('error', cb);
 };
 
-var send = function(data, options, cb) {
+BitCoinWebSocket.prototype.send = function(data, options, cb) {
   options = options || {};
 
-  ws.send(data, options, cb);
+  WebSocket.prototype.send.call(this, data, options, cb);
 };
 
+var ws = new BitCoinWebSocket(bcSocketUrl);
+
+ws.open(ws.options.newTransactions, function() {
+  console.log(ws.state());
+});
+
+ws.getData(function(data, flags) {
+  console.log(data);
+});
+
 module.exports = {
-  open: openStream,
-  close: closeStream,
-  get : getData,
-  send: send,
-  onOpen: onOpen,
-  onClose: onClose,
-  onError: onError,
-  state: state
+  ws: BitCoinWebSocket,
+  url: bcSocketUrl,
 };
+
