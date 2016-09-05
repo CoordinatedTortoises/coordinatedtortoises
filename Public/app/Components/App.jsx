@@ -5,7 +5,6 @@ class App extends React.Component {
     //Short hand for calling React.component.call(props)
     super(props);
 
-
     this.state = {
       prefs: {
         testData: 'blah blah blah',
