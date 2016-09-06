@@ -4,7 +4,7 @@
 var Main = ({stream}) => (
   <div className="panel panel-primary">
     <div className="panel-heading"> Current Trading Values</div>
-    <div className="panel-body">
+    <div className="panel-body main-graph">
     </div>
     <div className="panel-footer">Options:</div>
   </div>

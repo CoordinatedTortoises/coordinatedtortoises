@@ -1,7 +1,6 @@
 class App extends React.Component {
   constructor(props) {
 
-    console.log(props);
     //Short hand for calling React.component.call(props)
     super(props);
 
