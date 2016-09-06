@@ -20,7 +20,13 @@
 
 ## Usage
 
-> Some usage instructions
+The app has 2 separate databases, one for user preferences and user authorization, and the other one for containing all the info on the currency we
+are looking at. The user database is postgreSQL, so we can have a material view, and the other is rethinkDB which is noSQL, which has very fast read and write.
+
+The server uses node and express along with some other middleware for development.
+
+The front end uses react and d3.
+
 
 ## Requirements
 
