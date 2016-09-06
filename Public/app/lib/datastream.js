@@ -30,8 +30,9 @@
 
   var line = d3.svg.line()
       .x(function(d) { return x(d.date); })
-      .y(function(d) { return y(d.close); });
+      .y(function(d) { return y(d.btc); });
 
+  //Initialize the svg graph
   var svg = d3.select('.main-graph').append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -39,20 +40,28 @@
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   
+  //We might still need something like this.
   var type = function(d) {
-    d.date = formatDate.parse(d.date);
+    debugger;
+    console.log(d.date);
+    d.date = formatDate(d.date);
     d.close = +d.close;
     return d;
   };
 
+  // debugger;
+  // console.log(formatDate(new Date()));
 
-  d3.tsv('data.tsv', type, function(error, data) {
-    if (error) { 
-      throw error;
-    }
+  var render = function(data) {
+
+    //We might still need this
+
+    // var data = data.map(function(oneData) {
+    //   return type(oneData);
+    // });
 
     x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain(d3.extent(data, function(d) { return d.close; }));
+    y.domain(d3.extent(data, function(d) { return d.btc; }));
 
     svg.append('g')
         .attr('class', 'x axis')
@@ -70,30 +79,73 @@
         .text('Volume (BTC)');
 
     svg.append('path')
-        .datum(data)
         .attr('class', 'line')
-        .attr('d', line);
-  });
+        .attr('d', line(data));
+  };
+
+  var update = function(data) {
+
+    // We might still need this based on what Pete gives me
+
+    // var data = data.map(function(oneData) {
+    //   return type(oneData);
+    // });
+    
+    // console.log(data);
+
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain(d3.extent(data, function(d) { return d.btc; }));
+
+    d3.select('.x.axis').call(xAxis);
+    d3.select('.y.axis').call(yAxis);
+
+    d3.select('.line').attr('d', line(data));
+  };
 
 
 
   var socketURI = 'wss://ws.blockchain.info/inv';
+  var bucketCount = 0;
+  var sumIn = 0;
+
+  var volumeData = [];
+
+
 
   var getInputs = function(data) {
-    var sumIn = 0;
-    var sumOut = 0;
     data = JSON.parse(data);
 
-    console.log(data.x.time);
-    data.x.inputs.forEach(function(input) {
-      sumIn += input.prev_out.value;
-    });
+    //Should just run once on first call
+    if (!bucketCount) {
+      bucketCount = data.x.time;
+    }
 
-    data.x.out.forEach(function(output) {
-      sumOut += output.value;
-    });
+    //Condition to add to the bucket
+    if (data.x.time - bucketCount < 5) {
+      data.x.inputs.forEach(function(input) {
+        sumIn += input.prev_out.value;
+      });
+    } else {
+      //Add to volume data
+      console.log(sumIn);
+      volumeData.push({
+        btc: sumIn / 100000000,
+        date: new Date()
+      });
 
-    return [sumIn / 1000000, sumOut / 1000000];
+      //Rerender graph
+      //Call the rendering function
+      if (volumeData.length === 1 ) {
+        render(volumeData);
+      } else {
+        update(volumeData);
+      }
+
+      //Reset variables
+      sumIn = 0;
+      bucketCount = data.x.time;
+    }
+
   };
 
   var initSocket = function() {
@@ -101,25 +153,17 @@
     var bitsocket = new WebSocket(socketURI);
     bitsocket.onopen = function() {
       console.log('Connection opened!');
-      bitsocket.send(JSON.stringify({op: 'unconfirmed_sub'}), JSON.stringify({masked: true, setTxMini: true}));
+      bitsocket.send(JSON.stringify({op: 'unconfirmed_sub'}), {masked: true});
     };
     bitsocket.onerror = function(e) {
       console.log('There was an error: ', e);
     };
     bitsocket.onmessage = function(event) {
-
-      console.log('Message recieved: ', getInputs(event.data));
+      getInputs(event.data);
     };
 
   };
 
   initSocket();
-
-  // var graph = d3.select('.main-graph')
-  //               .append('svg:svg')
-  //               .attr('width', graphOptions.width)
-  //               .attr('height', graphOptions.height);
-
-
 
 })();
