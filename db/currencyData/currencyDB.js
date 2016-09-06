@@ -3,6 +3,8 @@
 //Install with brew install rethinkdb
 //start with brew services start rethinkdb
 
+//Rethinkdbdash is an orm which works for rethinkdb and doesn't require a connection
+//on every run command
 var rdash = require('rethinkdbdash')({
   db: 'currencyData',
   pool: true,
