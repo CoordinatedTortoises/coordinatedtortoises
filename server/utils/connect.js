@@ -29,6 +29,7 @@ var clean = function(transaction) {
 };
 
 ws.open(ws.options.newTransactions, function() {
+  console.log('Connected to API');
   console.log(ws.state());
 });
 
@@ -45,3 +46,4 @@ ws.onClose(function() {
   console.log(ws.state());
 });
 
+//module.exports.connect = {};

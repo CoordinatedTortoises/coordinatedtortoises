@@ -104,7 +104,7 @@
 
 
 
-  var socketURI = 'wss://ws.blockchain.info/inv';
+  var socketURI = 'ws://localhost:4000';
   var bucketCount = 0;
   var sumIn = 0;
 
@@ -153,13 +153,13 @@
     var bitsocket = new WebSocket(socketURI);
     bitsocket.onopen = function() {
       console.log('Connection opened!');
-      bitsocket.send(JSON.stringify({op: 'unconfirmed_sub'}), {masked: true});
     };
     bitsocket.onerror = function(e) {
       console.log('There was an error: ', e);
     };
     bitsocket.onmessage = function(event) {
-      getInputs(event.data);
+      console.log(event);
+      //getInputs(event.data);
     };
 
   };
