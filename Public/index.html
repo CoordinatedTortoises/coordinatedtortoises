@@ -6,10 +6,14 @@
   <title>Your Crypto-Tracker</title>
 
   <!-- The library dependencies -->
+  <!-- DOM manipulation -->
   <script src="node_modules/jquery/dist/jquery.js"></script>
+
   <!-- <script src="node_modules/d3/build/d3.js"></script> -->
+  <!-- d3 visualization -->
   <script src="//d3js.org/d3.v3.min.js"></script>
   <script src="node_modules/react/dist/react.js"></script>
+  <!-- React dom allows us to render things to the dom -->
   <script src="node_modules/react-dom/dist/react-dom.js"></script>
   <script src="node_modules/lodash/lodash.js"></script>
   <script src="/socket.io/socket.io.js"></script>
@@ -17,16 +21,20 @@
   <!-- USING CDN FOR BOOTSTRAP -->
 
   <!-- Latest compiled and minified CSS -->
+  <!-- CSS styling -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
   <link rel="stylesheet" href="assets/styles.css">
 
   <!-- Latest compiled and minified JavaScript -->
+  <!-- Javascript bootstrap styling -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 </head>
 <body>
+<!-- this div is where we stick all of our rendered react elements and it reaches across the whole page -->
   <div id="app" class="height-full"></div>
+  <!-- Old data from recastly -->
   <!-- <script src="compiled/src/components/VideoListEntry.js"></script>
   <script src="compiled/src/components/VideoList.js"></script>
   <script src="compiled/src/components/VideoPlayer.js"></script>

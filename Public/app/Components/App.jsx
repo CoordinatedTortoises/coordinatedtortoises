@@ -1,9 +1,10 @@
+//ES6 Version of react
 class App extends React.Component {
   constructor(props) {
 
     //Short hand for calling React.component.call(props)
     super(props);
-
+    //Sets the default state of the component
     this.state = {
       prefs: {
         testData: 'blah blah blah',
@@ -15,7 +16,7 @@ class App extends React.Component {
 
   //Define class methods here. A couple ones used in the sprint were rendering and lifecycle events
   //render is necessary to display the JSX supplied to the DOM!
-  //componenetDidMount is called once for every
+  //componenetDidMount is called once for every time the element is rendered and put onto the page
 
   synced() {
     this.setState({
@@ -32,7 +33,8 @@ class App extends React.Component {
 
   logout(callback) {
     console.log('Logging out now');
-
+    //Sends a request to logout
+    //This should also remove session tokens or oauth or something
     $.ajax({
       url: 'http://localhost:3000/logout',
       method: 'GET',
@@ -43,10 +45,10 @@ class App extends React.Component {
 
   savePrefs(callback) {
     console.log('Saving prefs now');
-
     var context = this;
+    //Context binds the current instance of app so we can call it in the ajax call without worry
     debugger;
-
+    //posts preferences to the database as a huge object
     $.ajax({
       url: 'https://localhost:3000/users/preferences',
       method: 'POST',
@@ -65,6 +67,7 @@ class App extends React.Component {
   render() {
     return (
       //Write JSX here, and passing down important props, like top level methods
+      //This will be called whenever we create an app in a jsx file
       //Components:
         //Side bar nav
           //Save Prefs
@@ -92,5 +95,5 @@ class App extends React.Component {
 }
 
 
-//ES6 makes you expose things to the window, similar to in Node
+//ES6 exposing app to window to allow other scripts to access it, similar to in Node
 window.App = App;
