@@ -5,7 +5,8 @@ var mo = require('method-override');
 var db = require('../db/prefData/userPrefDB.js');
 var session = require('express-session');
 var path = require('path');
-
+//var pete = require('./workers/serverSocket.js');
+var connect = require('./utils/connect.js');
 //users, 
 //users/preferences, login, signup,
 // restrict function for sessions
@@ -26,19 +27,19 @@ login,
 var app = express();
 var server = require('http').createServer(app);
 
-var io = require('socket.io')(server);
-server.listen(8080, '127.0.0.1');
+// var io = require('socket.io')(server);
+// server.listen(8080, '127.0.0.1');
 
-io.on('connection', function (socket) {
-  console.log('Connected to socket in server.');
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
+// io.on('connection', function (socket) {
+//   console.log('Connected to socket in server.');
+//   socket.emit('news', { hello: 'world' });
+//   socket.on('my other event', function (data) {
+//     console.log(data);
+//   });
+// });
 
-db.findAll(db.users, console.log);
-db.add(db.users, {id: 78, username: 'Stevie Ray', password: 'sercret'}, console.log);
+// db.findAll(db.users, console.log);
+// db.add(db.users, {id: 78, username: 'Stevie Ray', password: 'sercret'}, console.log);
 
 // create application/json parser
 var jsonParser = bp.json();
