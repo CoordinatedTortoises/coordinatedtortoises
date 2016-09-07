@@ -1,9 +1,9 @@
 var db = require('../../db/currencyData/currencyDB.js');
 var skt = require('../workers/bcSocket.js');
+var wss = require('../workers/serverSocket.js');
 var geo = require('geo-from-ip');
 
 var ws = new skt.ws(skt.url);
-db.deleteAll();
 
 var clean = function(transaction) {
 
@@ -36,12 +36,9 @@ ws.getData(function(data, flags) {
 
   var transaction = clean(JSON.parse(data).x);
 
-  db.addData(transaction, function(resp) {
-    db.getAll('bitcoinData', function(err, res) {
-      //console.log('Table has ' + res.length + ' observations');
-      console.log(res);
-    });
-  });
+  wss.broadcast(JSON.stringify(transaction));
+  db.addData(transaction);
+
 });
 
 ws.onClose(function() {
