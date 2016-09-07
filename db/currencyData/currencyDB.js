@@ -41,7 +41,7 @@ var readLimitedChanges = function(orderBy, limit, callback){
   }
   rdash.table('bitcoinData').orderBy(orderBy).limit(limit).changes().run({cursor: true}, function(err, cursor){
     if(callback){
-      cursor.each(callback);      
+      cursor.each(callback);
     }
   });
 };
@@ -52,10 +52,10 @@ var getLimited = function(orderBy, limit, callback){
   }
   rdash.table('bitcoinData').orderBy(orderBy).limit(limit).run({cursor: true}, function(err, cursor){
     if(callback){
-      cursor.each(callback);      
+      cursor.each(callback);
     }
   });
-}
+};
 
 var getAll = function(tableName, callback){
   if(tableName === undefined){
@@ -66,7 +66,7 @@ var getAll = function(tableName, callback){
       callback(res, err);
     }
   });
-}
+};
 
 var addData = function(data, callback){
   rdash.table('bitcoinData').insert(data).run(function(err, dbResp){
@@ -78,7 +78,7 @@ var addData = function(data, callback){
 
 var deleteAll = function(callback){
   rdash.table('bitcoinData').delete().run(function(err, data){
-    if(callback){      
+    if(callback){
       callback(data);
     }
   });
@@ -99,7 +99,7 @@ var getTableList = function(callback){
   rdash.tableList().run(function(err, res){
     callback(err, res);
   });
-}
+};
 
 module.exports = {
   addData: addData,
