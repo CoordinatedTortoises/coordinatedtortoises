@@ -24,4 +24,5 @@ for data in sys.stdin:
   print resp.text
 
 
-  conn.close()
+def callService( service ):
+  return
