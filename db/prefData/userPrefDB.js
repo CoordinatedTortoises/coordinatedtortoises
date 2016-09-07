@@ -26,7 +26,8 @@ var sequelize = new Sequelize(url,  {
 var findAll = function(model, callback) {
   model.findAll({}).then(callback);
 };
-
+var findUser = function(id,)
+>>>>>>> Worked more on paycoin and made small to change to user
 var add = function(model, options, callback) {
   model.findOrCreate({where: options}).then(callback);
 };

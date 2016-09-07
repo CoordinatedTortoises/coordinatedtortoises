@@ -1,5 +1,9 @@
 import sys
 import requests
+from two1.wallet import Wallet
+from two1.bitrequests import BitTransferRequests
+wallet = Wallet();
+# requests = OnChainRequests(wallet)
 # sudo pip install requests
 # If you don't have pip, brew install pip
 
