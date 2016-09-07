@@ -1,6 +1,10 @@
 //ES6 makes you expose things to the window, similar to in Node
 
 //Stateless components don't even have to be declared as a React Component, and ES6 syntax makes them look super clean
+
+//This is a navbar which will be used on the side of our app to change preferences
+//It has the title of our app, a button to save preferences to the database
+//and a logout button
 var NavBar = ({logout, savePrefs, synced}) => (
 
   <div className="panel panel-primary height-full">
