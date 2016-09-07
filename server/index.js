@@ -2,7 +2,7 @@ var express = require('express');
 var morgan = require('morgan');
 var bp = require('body-parser');
 var mo = require('method-override');
-var db = require('../db/prefData/userPrefDB.js').db;
+var db = require('../db/prefData/userPrefDB.js');
 var session = require('express-session');
 var path = require('path');
 //users, 
@@ -21,44 +21,45 @@ login,
 
 */
 
-//-------- server set up ----------//
+//-------- SERVER & SOCKET SET UP ----------//
 var app = express();
 var server = require('http').createServer(app);
 
 var io = require('socket.io')(server);
 server.listen(8080, '127.0.0.1');
 
-//io.set('origins', 'http://localhost:8080');
-
 io.on('connection', function (socket) {
-  console.log('Hello from server. connected to socket');
+  console.log('Connected to socket in server.');
   socket.emit('news', { hello: 'world' });
   socket.on('my other event', function (data) {
     console.log(data);
   });
 });
-//initialize session
+
+db.findAll(db.users, console.log);
+db.add(db.users, {id: 78, username: 'Stevie Ray', password: 'sercret'}, console.log);
+
 // create application/json parser
 var jsonParser = bp.json();
-
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bp.urlencoded({ extended: false });
 
 //initialize session
 app.use(session({secret: 'secret'}));
 
+//serve static assets
 app.use(express.static('../Public'));
 
 
 //-------------------------- ROOT -------------------------//
 app.get('/', function(req, res) {
-  console.log('BEFORE LOG IN: ');
   //if user in session
   if (req.session.username && req.session.password) {
     console.log(req.session.username + ' has been logged in.');
     //redirect to /users/prefs
     res.redirect('/users/preferences');
   } else {
+  //else go to login page
     //res.redirect('/login');
     res.sendfile(path.resolve('../Public/index.html'));
   }
@@ -85,7 +86,21 @@ app.get('/users/preferences', function(req, res) {
   //   res.redirect('/login');
   // }
 
+  //version without sessions
+  db.findAll(db.preferences, function(err, allPrefs) {
+    if (err) {
+      console.log('Oops! error: ', err);
+    } else {
+      console.log('Got all user prefs: ', allPrefs);
+      var prefs = allPrefs.toArray();
+      prefs.forEach(function(aPref) {
+        //find matching id to user's
 
+          //update pref
+
+      });
+    }
+  });  
 });
 
 app.post('/users/preferences', urlencodedParser, function(req, res) {
@@ -129,6 +144,17 @@ app.post('/login', function(req, res) {
     console.log('New user added: ' + newUser);
     res.json(newUser);
   });
+});
+
+//--------------------------SIGN UP---------------//
+app.get('/signup', function(req, res) {
+  console.log('signing up...');
+  //load sign up page.
+});
+
+app.post('/signup', function(req, res) {
+  //check how to access in req the username and pw, store in var
+  //add new user to db
 });
 
 //--------------------------- LOGOUT --------------//
