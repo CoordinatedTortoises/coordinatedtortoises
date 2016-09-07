@@ -42,13 +42,12 @@ class App extends React.Component {
   }
 
   savePrefs(callback) {
-    console.log('Saving prefs now');
+    console.log('Saving prefs now', this.state.prefs);
 
     var context = this;
-    debugger;
 
     $.ajax({
-      url: 'https://localhost:3000/users/preferences',
+      url: 'http://localhost:3000/users/preferences',
       method: 'POST',
       data: {
         prefs: JSON.stringify(this.state.prefs)

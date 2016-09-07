@@ -5,15 +5,23 @@ var mo = require('method-override');
 var db = require('../db/prefData/userPrefDB.js').db;
 var session = require('express-session');
 
-//---------- database methods ----------------//
-//preferences: id, preference, accountInfo
-// var prefs = require('../db/prefData/userPrefDB.js').preferences;
-// var findAll = require('../db/prefData/userPrefDB.js').findAll;
-// var add = require('../db/prefData/userPrefDB.js').add;
+//users, 
+//users/preferences, login, signup,
+// restrict function for sessions
+//init live data stream when hit before login
+// save , get user pref after login
+// when hit root open data stream to client.
+// authentication w/ sessions
 
 //-------- server set up ----------//
 var app = express();
 //initialize session
+// create application/json parser
+var jsonParser = bp.json();
+
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bp.urlencoded({ extended: false });
+
 app.use(session({secret: 'secret'}));
 app.use(express.static(__dirname + '/public'));
 
@@ -28,7 +36,7 @@ app.get('/', function(req, res) {
 });
 
 
-//----------- main page -------------//
+//----------- user/pref & save pref -------------//
 
 //find all users, send them back
 app.get('/users/preferences', function(req, res) {
@@ -48,8 +56,29 @@ app.get('/users/preferences', function(req, res) {
   }
 });
 
+app.post('/users/preferences', urlencodedParser, function(req, res) {
+  //console.log(typeof JSON.parse(req.body.prefs), 'parsed body!!!');
+  if (req.session.username && req.session.password) {
+    db.add(db.preferences, JSON.parse(req.body.prefs), function(err, newPref) {
+      if (err) {
+        console.log('Error in getting preferences.', err);
+      } else {
+        console.log('Got preferences.', newPref);
+        var allPrefs = newPref.toArray();
+
+        res.json('saved prefs', newPref);
+      }
+    });
+  } else {
+    console.log('hey. not logged in for /users/preferences');
+    //should redirect to login page.
+  }
+});
+
+//------------------------LOGIN--------------------//
+
 app.get('/login', function(req, res) {
-  res.render('login.html');
+  res.render('index.html');
 });
 
 //new user submitted, add new user to db
@@ -67,8 +96,12 @@ app.post('/login', function(req, res) {
   });
 });
 
-//------------- login --------------//
+//--------------------------- LOGOUT --------------//
 
+app.get('/logout', function(req, res) {
+  alert('You have been logged out.');
+  res.redirect('/login');
+});
 
 app.listen(3000, function() {
   console.log('server listening at port 3000');
