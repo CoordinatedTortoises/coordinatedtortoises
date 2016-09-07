@@ -5,6 +5,7 @@ var mo = require('method-override');
 var db = require('../db/prefData/userPrefDB.js');
 var session = require('express-session');
 var path = require('path');
+
 //users, 
 //users/preferences, login, signup,
 // restrict function for sessions
@@ -126,7 +127,7 @@ app.post('/users/preferences', urlencodedParser, function(req, res) {
 
 app.get('/login', function(req, res) {
   console.log('Now at login.');
-  //res.sendfile(__dirname + '../Public/index.html');
+  res.sendfile('../Public/login.html');
 });
 
 //new user submitted, add new user to db
@@ -148,8 +149,8 @@ app.post('/login', function(req, res) {
 
 //--------------------------SIGN UP---------------//
 app.get('/signup', function(req, res) {
-  console.log('signing up...');
-  //load sign up page.
+  console.log('now at sign up page');
+  res.sendfile('../Public/login.html');
 });
 
 app.post('/signup', function(req, res) {
