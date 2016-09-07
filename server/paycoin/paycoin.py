@@ -1,9 +1,8 @@
 import sys
-import requests
 from two1.wallet import Wallet
 from two1.bitrequests import BitTransferRequests
 wallet = Wallet();
-# requests = OnChainRequests(wallet)
+requests = OnChainRequests(wallet)
 # sudo pip install requests
 # If you don't have pip, brew install pip
 
@@ -22,10 +21,22 @@ wallet = Wallet();
 # which paays us some amount of 'tip' for using our service, and our server will then make a request
 # to a 21 module that costs money, and we send the result back to the user
 
+def useService( serviceUrl ):
+  url = serviceUrl
+  r = requests.get(url=url)
+  return r.headers['price']
+
+
+
+# use = json.loads(sys.stdin)
+
+
+ret = ''
 for data in sys.stdin:
-  r = requests.get('http://www.python.org')
-  # r = requests.post('http://localhost:3000', data)
-  print resp.text
+  ret = ret + data
+ret = json.loads(ret)
+for service in ret:
+  print usesService(service['url'])
 
 
 def callService( service ):
