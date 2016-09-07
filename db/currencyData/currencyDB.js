@@ -61,9 +61,9 @@ var getAll = function(tableName, callback){
   if(tableName === undefined){
     return;
   }
-  rdash.table(tableName).run(function(res, err){
+  rdash.table(tableName).run(function(err, res){
     if(callback){
-      callback(res, err);
+      callback(err, res);
     }
   });
 };
