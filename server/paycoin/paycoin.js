@@ -40,3 +40,7 @@ var checkCost = function(urlList, callback){
     }
   });
 }
+
+//Example Usage: 
+// checkCost([{url: "https://mkt.21.co/21dotco/zip_code_data/zipdata/collect?zip_code=94109"}, {url:"https://mkt.21.co/21dotco/extract_links/web_links/collect?url=https://21.co"}], console.log);
+module.exports.checkCost = checkCost;
