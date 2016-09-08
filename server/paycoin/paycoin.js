@@ -17,7 +17,6 @@
 //the reason I'm using python is because the only way to use two1 is with python
 
 var PythonShell = require('python-shell');
-var useServices = new PythonShell('paycoin.py');
 
 
 
@@ -39,6 +38,12 @@ var checkCost = function(urlList, callback){
       console.log(err);
     }
   });
+}
+
+var useServices = function(urlList, username, callback){
+  var useService = new PythonShell('paycoin.py');
+  
+
 }
 
 //Example Usage: 
