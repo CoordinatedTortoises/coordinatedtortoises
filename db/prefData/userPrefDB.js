@@ -39,6 +39,16 @@ var deleteAll = function(model, callback) {
   model.destroy({where: {}}).then(callback);
 };
 
+var deleteOne = function(model, params, callback) {
+  model.destroy({where: params}).then(function(err){
+    if (err) {
+      throw err;
+    } else {
+      callback();
+    }
+  })
+}
+
 var preferences = preferencesModel(sequelize);
 var users = usersModel(sequelize);
 
