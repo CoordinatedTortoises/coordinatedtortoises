@@ -30,16 +30,16 @@ class App extends React.Component {
   }
 
 
-  logout(callback) {
-    console.log('Logging out now');
+  // logout(callback) {
+  //   console.log('Logging out now');
 
-    $.ajax({
-      url: 'http://localhost:3000/logout',
-      method: 'GET',
-      success: (data) => callback(data),
-      error: (error) => console.log('An error occurred!: ', error)
-    });
-  }
+  //   $.ajax({
+  //     url: 'http://localhost:3000/logout',
+  //     method: 'GET',
+  //     success: (data) => console.log('logged out'),
+  //     error: (error) => console.log('An error occurred!: ', error)
+  //   });
+  // }
 
   savePrefs(callback) {
     console.log('Saving prefs now', this.state.prefs);

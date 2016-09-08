@@ -23,15 +23,22 @@ var sequelize = new Sequelize(url,  {
 //   protocol: 'postgres',
 //   query:    {pool: true}
 // };
-var findAll = function(model, callback){
+var findAll = function(model, callback) {
   model.findAll({}).then(callback);
-}
-var add = function(model, options, callback) {
-  model.findOrCreate({where:options}).then(callback);
 };
-var deleteAll = function(model, callback){
-  model.destroy({where:{}}).then(callback);
-}
+
+var add = function(model, options, callback) {
+  model.findOrCreate({where: options}).then(callback);
+};
+
+var findOne = function(model, options, callback) {
+  model.find({where: options}).then(callback);
+};
+
+var deleteAll = function(model, callback) {
+  model.destroy({where: {}}).then(callback);
+};
+
 var preferences = preferencesModel(sequelize);
 var users = usersModel(sequelize);
 
@@ -46,6 +53,7 @@ users.hasOne(preferences);
 
 
 module.exports.users = users;
+module.exports.findOne = findOne;
 module.exports.preferences = preferences;
 module.exports.db = sequelize;
 module.exports.findAll = findAll;

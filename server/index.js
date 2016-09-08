@@ -7,6 +7,8 @@ var session = require('express-session');
 var path = require('path');
 //var pete = require('./workers/serverSocket.js');
 var connect = require('./utils/connect.js');
+
+console.log(db);
 //users, 
 //users/preferences, login, signup,
 // restrict function for sessions
@@ -25,26 +27,14 @@ login,
 
 //-------- SERVER & SOCKET SET UP ----------//
 var app = express();
-var server = require('http').createServer(app);
-
-// var io = require('socket.io')(server);
-// server.listen(8080, '127.0.0.1');
-
-// io.on('connection', function (socket) {
-//   console.log('Connected to socket in server.');
-//   socket.emit('news', { hello: 'world' });
-//   socket.on('my other event', function (data) {
-//     console.log(data);
-//   });
-// });
-
-// db.findAll(db.users, console.log);
-// db.add(db.users, {id: 78, username: 'Stevie Ray', password: 'sercret'}, console.log);
+//var server = require('http').createServer(app);
 
 // create application/json parser
 var jsonParser = bp.json();
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bp.urlencoded({ extended: false });
+
+app.use(urlencodedParser);
 
 //initialize session
 app.use(session({secret: 'secret'}));
@@ -53,25 +43,26 @@ app.use(session({secret: 'secret'}));
 app.use(express.static('../Public'));
 
 
-//-------------------------- ROOT -------------------------//
-app.get('/', function(req, res) {
-  //if user in session
+var restrict = function(req, res, next) {
+  console.log('Inside restrict: ', req.session);
   if (req.session.username && req.session.password) {
-    console.log(req.session.username + ' has been logged in.');
-    //redirect to /users/prefs
-    res.redirect('/users/preferences');
+    next();  
   } else {
-  //else go to login page
-    //res.redirect('/login');
-    res.sendfile(path.resolve('../Public/index.html'));
+    res.redirect('/login');
   }
+};
+
+
+//-------------------------- ROOT -------------------------//
+app.get('/', restrict, function(req, res) {
+  res.sendfile(path.resolve('../Public/index.html'));
 });
 
 
 //----------- user/pref & save pref -------------//
 
-//find all users, send them back
-app.get('/users/preferences', function(req, res) {
+//find a pref as soon as log in, send them back to show on page
+app.get('/users/preferences', restrict, function(req, res) {
   console.log('now at /users/pref');
   //get all users from db
   // if (req.session.username && req.session.password) {
@@ -89,7 +80,10 @@ app.get('/users/preferences', function(req, res) {
   // }
 
   //version without sessions
-  db.findAll(db.preferences, function(err, allPrefs) {
+
+  //use session variables to lookup just the preferences for that user, 
+  //then send that result back to clinet
+  db.findOne(db.preferences, function(err, allPrefs) {
     if (err) {
       console.log('Oops! error: ', err);
     } else {
@@ -105,7 +99,8 @@ app.get('/users/preferences', function(req, res) {
   });  
 });
 
-app.post('/users/preferences', urlencodedParser, function(req, res) {
+//update user's pref
+app.post('/users/preferences', restrict, function(req, res) {
   //console.log(typeof JSON.parse(req.body.prefs), 'parsed body!!!');
   if (req.session.username && req.session.password) {
     db.add(db.preferences, JSON.parse(req.body.prefs), function(err, newPref) {
@@ -128,42 +123,56 @@ app.post('/users/preferences', urlencodedParser, function(req, res) {
 
 app.get('/login', function(req, res) {
   console.log('Now at login.');
-  res.sendfile('../Public/login.html');
+  res.sendfile(path.resolve('../Public/login.html'));
 });
 
 //new user submitted, add new user to db
 app.post('/login', function(req, res) {
-  req.session.username = req.body.username;
-  req.session.password = req.body.password;
+  console.log(req.body);
 
-  db.add(db.users, req.body.prefs, function(err, newUser) {
-
+  db.findOne(db.users, req.body, function(err, newUser) {
     if (err) {
       console.log('error in adding new user: ', err);
-      return;
+      res.redirect('/signup');
+    } else {
+      //console.log("The new user", newUser);
+      if (newUser) {
+        req.session.username = req.body.username;
+        req.session.password = req.body.password;
+        res.redirect('/');
+      } else {
+        res.redirect('/signup');
+      }
     }
-
-    console.log('New user added: ' + newUser);
-    res.json(newUser);
   });
 });
 
 //--------------------------SIGN UP---------------//
 app.get('/signup', function(req, res) {
   console.log('now at sign up page');
-  res.sendfile('../Public/login.html');
+  res.sendfile(path.resolve('../Public/signup.html'));
 });
 
 app.post('/signup', function(req, res) {
   //check how to access in req the username and pw, store in var
   //add new user to db
+  db.add(db.users, req.body, function(err, newUser) {
+    if (err) {
+      console.log('Error: ', err);
+    } else {
+      console.log(newUser, 'new user!');
+      res.json('saved new user', newUser);
+    }
+  });
 });
 
 //--------------------------- LOGOUT --------------//
 
 app.get('/logout', function(req, res) {
-  alert('You have been logged out.');
-  res.redirect('/login');
+  req.session.destroy(function() {
+    res.redirect('/login');
+  });
+  //res.redirect('/login');
 });
 
 app.listen(3000, function() {
