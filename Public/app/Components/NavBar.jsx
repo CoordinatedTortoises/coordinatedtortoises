@@ -11,8 +11,10 @@ var NavBar = ({logout, savePrefs, synced}) => (
           Try interacting with the ticker graphs on the right! In your account, you can customize your 
           dashboard view any way you like, and save those preferences so that you see them each time you log in. 
         </span>
+        <form action="/login" method="get">
+          <button className="btn btn-default"></button>
+        </form>
         <button className="btn btn-default" onClick={() => savePrefs(synced)}>Save Your Preferences</button>
-        <button className="btn btn-default" onClick={logout}>Logout</button>
       </div>
     </div>
     <div className="panel-footer">
@@ -25,5 +27,6 @@ var NavBar = ({logout, savePrefs, synced}) => (
 
 window.NavBar = NavBar;
 
+//onClick={() => savePrefs(synced)}
 
 
