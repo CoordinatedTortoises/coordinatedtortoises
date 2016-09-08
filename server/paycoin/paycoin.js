@@ -46,6 +46,9 @@ var useServices = function(urlList, username, callback){
 
 };
 
+//Want to create a specific function to find the transaction with a specific id
+//And make it into a graph like module for the page
+
 
 //Example Usage: 
 // checkCost([{url: "https://mkt.21.co/21dotco/zip_code_data/zipdata/collect?zip_code=94109"}, {url:"https://mkt.21.co/21dotco/extract_links/web_links/collect?url=https://21.co"}], console.log);
