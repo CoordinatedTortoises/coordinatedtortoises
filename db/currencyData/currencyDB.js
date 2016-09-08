@@ -101,6 +101,20 @@ var getTableList = function(callback){
   });
 };
 
+var insertJSON = function(json, callback){
+  var data = JSON.parse(json);
+  data.forEach(function(transaction/*?*/){
+    addData(transaction, callback);
+  });
+};
+
+var readHistoricalData = function(tableName, timestamp, callback){
+  //Table is a string, timestamp is an epoch time so in milliseconds since Jan 1, 1970
+  rdash.table(table).filter(rdash.row('time').gt(timestamp)).run(function(err, res){
+    callback(err, res);
+  });
+};
+
 module.exports = {
   addData: addData,
   readChanges: readChanges,
@@ -109,8 +123,11 @@ module.exports = {
   deleteAll: deleteAll,
   getAll: getAll,
   reql: rdash,
+  insertJSON: insertJSON,
   getTableList: getTableList
 };
+
+getAll('bitcoinData', console.log);
 // module.exports.readChanges(console.log);
 // readLimitedChanges({index: 'id'}, 3, console.log);
 // getLimited({index: 'id'}, 3, console.log);
