@@ -1,6 +1,9 @@
 import sys
 import requests
 import json
+from two1.wallet import Wallet
+from two1.bitserv.flask import Payment
+# provider = TwentyOneProvider()
 # sudo pip install requests
 # If you don't have pip, brew install pip
 
@@ -21,7 +24,7 @@ import json
 
 
 
-def checkService( serviceUrl ):
+def searchFor( parameters ):
   url = serviceUrl
   r = requests.get(url=url)
   return r.headers['price']
@@ -30,14 +33,12 @@ def checkService( serviceUrl ):
 
 # use = json.loads(sys.stdin)
 
-
-ret = ''
-for data in sys.stdin:
-  ret = ret + data
-ret = json.loads(ret)
-for service in ret:
-  print checkService(service['url'])
+# print provider
+# ret = ''
+# for data in sys.stdin:
+#   ret = ret + data
+# ret = json.loads(ret)
+# for searchString in ret:
+#   print searchFor(searchString)
   # for service in json.loads(data):
   #   print json.dumps(str(checkService(service.values()[0].encode('utf-8'))), separators=(',',':'))
-
-

@@ -38,14 +38,19 @@ var checkCost = function(urlList, callback){
       console.log(err);
     }
   });
-}
+};
 
 var useServices = function(urlList, username, callback){
   var useService = new PythonShell('paycoin.py');
-  
+  //Actually call the services to be used here, hard to implement because 21 is still in beta
 
-}
+};
+
 
 //Example Usage: 
 // checkCost([{url: "https://mkt.21.co/21dotco/zip_code_data/zipdata/collect?zip_code=94109"}, {url:"https://mkt.21.co/21dotco/extract_links/web_links/collect?url=https://21.co"}], console.log);
-module.exports.checkCost = checkCost;
+module.exports = {
+  checkCost: checkCost
+};
+
+
