@@ -145,12 +145,13 @@ module.exports = {
   reql: rdash,
   insertJSON: insertJSON,
   readHistoricalData: readHistoricalData,
+  saveToJSON: saveToJSON,
   getTableList: getTableList
 };
 
-getAll('bitcoinData', function(err, res){
-  console.log(res);
-});
+// getAll('bitcoinData', function(err, res){
+//   console.log(res);
+// });
 // module.exports.readChanges(console.log);
 // readLimitedChanges({index: 'id'}, 3, console.log);
 // getLimited({index: 'id'}, 3, console.log);
