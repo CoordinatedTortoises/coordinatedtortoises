@@ -29,6 +29,11 @@ class App extends React.Component {
     }.bind(this));
   }
 
+  componentDidMount() {
+    console.log('It mounted');
+    this.props.initGraph();
+  }
+
 
   // logout(callback) {
   //   console.log('Logging out now');
@@ -81,9 +86,6 @@ class App extends React.Component {
           <Main />
         </div>
       </div>
-
-
-
     );
   }
 
