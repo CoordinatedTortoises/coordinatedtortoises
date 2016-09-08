@@ -49,6 +49,15 @@ var deleteOne = function(model, params, callback) {
   })
 }
 
+var changePass = function(model, username, oldPass, newPass, callback){
+  model.update({password: newPass}, {
+    where: {
+      username: username,
+      password: oldPass
+    }
+  });
+}
+
 var preferences = preferencesModel(sequelize);
 var users = usersModel(sequelize);
 
