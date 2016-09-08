@@ -124,6 +124,7 @@ module.exports = {
   getAll: getAll,
   reql: rdash,
   insertJSON: insertJSON,
+  readHistoricalData: readHistoricalData,
   getTableList: getTableList
 };
 
