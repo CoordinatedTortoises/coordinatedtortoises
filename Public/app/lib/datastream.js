@@ -1,5 +1,5 @@
 //this file will contain d3 related methods, and will expose the live data
-(function () {
+var initGraph = function () {
  
   var graphOptions = {
     width: '100%',
@@ -39,26 +39,7 @@
     .append('g')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  
-  //We might still need something like this.
-  var type = function(d) {
-    debugger;
-    console.log(d.date);
-    d.date = formatDate(d.date);
-    d.close = +d.close;
-    return d;
-  };
-
-  // debugger;
-  // console.log(formatDate(new Date()));
-
   var render = function(data) {
-
-    //We might still need this
-
-    // var data = data.map(function(oneData) {
-    //   return type(oneData);
-    // });
 
     x.domain(d3.extent(data, function(d) { return d.date; }));
     y.domain(d3.extent(data, function(d) { return d.btc; }));
@@ -85,21 +66,15 @@
 
   var update = function(data) {
 
-    // We might still need this based on what Pete gives me
-
-    // var data = data.map(function(oneData) {
-    //   return type(oneData);
-    // });
-    
-    // console.log(data);
-
     x.domain(d3.extent(data, function(d) { return d.date; }));
     y.domain(d3.extent(data, function(d) { return d.btc; }));
 
-    d3.select('.x.axis').call(xAxis);
-    d3.select('.y.axis').call(yAxis);
+    var trans = d3.select('body').transition();
 
-    d3.select('.line').attr('d', line(data));
+    trans.select('.x.axis').duration(3000).ease('linear').call(xAxis);
+    trans.select('.y.axis').duration(3000).ease('linear').call(yAxis);
+
+    trans.select('.line').duration(3000).ease('linear').attr('d', line(data));
   };
 
 
@@ -113,23 +88,22 @@
 
 
   var getInputs = function(data) {
-    data = JSON.parse(data);
+    //Convert time
+    data.time = new Date(data.time);
 
     //Should just run once on first call
     if (!bucketCount) {
-      bucketCount = data.x.time;
+      bucketCount = data.time;
     }
 
-    //Condition to add to the bucket
-    if (data.x.time - bucketCount < 5) {
-      data.x.inputs.forEach(function(input) {
-        sumIn += input.prev_out.value;
-      });
+    //Condition to add to the bucket, buckets are 5s for now
+    if (data.time - bucketCount < 3000) {
+      sumIn += data.bc;
     } else {
       //Add to volume data
       console.log(sumIn);
       volumeData.push({
-        btc: sumIn / 100000000,
+        btc: sumIn,
         date: new Date()
       });
 
@@ -143,7 +117,7 @@
 
       //Reset variables
       sumIn = 0;
-      bucketCount = data.x.time;
+      bucketCount = data.time;
     }
 
   };
@@ -158,12 +132,13 @@
       console.log('There was an error: ', e);
     };
     bitsocket.onmessage = function(event) {
-      console.log(event);
-      //getInputs(event.data);
+      getInputs(JSON.parse(event.data));
     };
 
   };
 
   initSocket();
 
-})();
+};
+
+window.initGraph = initGraph;
