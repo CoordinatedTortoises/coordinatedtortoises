@@ -125,31 +125,12 @@ app.get('/signup', function(req, res) {
 });
 
 app.post('/signup', function(req, res) {
-  //var un = req.body.username;
-  //var pw = req.body.password;
-  //generate hash password
-  //var passwordToSave = bcrypt.hashSync(pw, salt);
-
-  // var option = {
-  //   username: un,
-  //   password: passwordToSave
-  // };
-  //store option in db
-  // db.add(db.users, req.body, function(newUser, err) {
-  //   if (err) {
-  //     console.log('Error: ', err);
-  //   } else {
-  //     console.log(newUser, 'new user!');
-  //     res.json('saved new user', newUser);
-  //   }
-  // });
   console.log('NEW UESRRRRRRR!!!!!!!!!!!!!');
-  db.newUser(req.username, req.password, function(err, newUser) {
+  db.newUser(req.body.username, req.body.password, function(err, newUser) {
     if (err) {
       console.log(err, 'Error!');
     } else {
       console.log('New User!!!', newUser);
-      
     }
   });
 });
