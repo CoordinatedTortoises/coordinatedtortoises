@@ -145,7 +145,13 @@ app.post('/signup', function(req, res) {
   //   }
   // });
   console.log('NEW UESRRRRRRR!!!!!!!!!!!!!');
-  db.newUser(req.username, req.password);
+  db.newUser(req.username, req.password, function(err, newUser) {
+    if (err) {
+      console.log(err, 'Error!');
+    } else {
+      console.log('New User!!!', newUser);
+    }
+  });
 });
 
 //-------------------------- ROOT -------------------------//
