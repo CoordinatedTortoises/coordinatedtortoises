@@ -2,9 +2,9 @@
 var Sequelize = require('Sequelize');
 module.exports = function(db) {
   return db.define('user', {
-    id: { type: 'serial', primaryKey: true },
-    username: Sequelize.STRING,
+    username: {type: Sequelize.STRING, primaryKey: true},
     password: Sequelize.STRING,
-    salt: Sequelize.STRING
+    salt: Sequelize.STRING,
+    preferences: Sequelize.BLOB
   });
 };

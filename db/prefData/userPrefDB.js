@@ -6,7 +6,6 @@
 // https://launchschool.com/blog/how-to-install-postgresql-on-a-mac
 var url = require('./config/psqlconfig.js')
 var Sequelize = require('sequelize');
-var preferencesModel = require('./preferences.js')
 var usersModel = require('./users.js');
 var bcrypt = require('bcrypt');
 var sequelize = new Sequelize(url,  {
@@ -74,14 +73,12 @@ var changePass = function(model, username, oldPass, newPass, callback){
       username: username,
       password: oldPass
     }
-  });
+  }).then(callback);
 }
 
-var preferences = preferencesModel(sequelize);
+
 var users = usersModel(sequelize);
 
-preferences.belongsTo(users);
-users.hasOne(preferences);
 
 var newUser = function(username, password, callback) {
   bcrypt.genSalt(10, function(err, salt){
@@ -90,9 +87,10 @@ var newUser = function(username, password, callback) {
         where: {
           username: username,
           password: hashP,
-          salt: salt
+          salt: salt,
+          preferences: {}
         }
-      });
+      }).then(callback);
     });
   });
 };
@@ -106,6 +104,14 @@ var checkUser = function(username, password, callback) {
       callback(hashInput === user.password);
     });
   });
+};
+
+var savePref = function(username, preferences, callback) {
+  users.update({preferences: preferences}, {
+    where: {
+      username: username
+    }
+  }).then(callback);
 }
 // add(users, {id:3, username:'stevo', password:'pass'}, console.log);
 // findAll(users, function(users){
@@ -116,10 +122,15 @@ var checkUser = function(username, password, callback) {
 module.exports = {
   users: users,
   findOne: findOne,
-  preferences: preferences,
   db: sequelize,
   findAll: findAll,
+  findUser: findUser,
+  findUserByUsername: findUserByUsername,
+  deleteOne: deleteOne,
+  deleteAll: deleteAll,
+  changePass: changePass,
   add: add,
   newUser: newUser,
-  checkUser: checkUser
+  checkUser: checkUser,
+  savePref: savePref
 };
