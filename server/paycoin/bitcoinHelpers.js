@@ -22,7 +22,7 @@ var bitcoin = require('bitcoinjs-lib');
 
 
 //UrlList should similar to [{url: "https://mkt.21.co/21dotco/zip_code_data/zipdata/collect?zip_code=94109"}, {url:"https://mkt.21.co/21dotco/extract_links/web_links/collect?url=https://21.co"}]
-var checkCost = function(urlList, callback){
+var checkCost21Services = function(urlList, callback){
   getCost = new PythonShell('checkpay.py');
   getCost.send(JSON.stringify(urlList));
   var total = 0;
@@ -48,7 +48,12 @@ var sendMoney = function(prevTxID, payee, amount, callback, network, outputIndex
   //@Payee is the address of the person you're sending money to
   //@amount is amount in satoshis
   //@Callback is what happens after it has added an input and output
-  //outputIndex is an optional arg if the transaction referenced has multiple outputs
+  //@network is a string which is either bitcoin, testnet, litecoin, or dogecoin
+  //@outputIndex is an optional arg if the transaction referenced has multiple outputs
+  network = bitcoin.networks[network] || bitcoin.networks.bitcoin;
+  if(network === undefined){
+    return;
+  }
   outputIndex = outputIndex || 0;
   var tx = new bitcoin.TransactionBuilder();
   tx.addInput(prevTxID, outputIndex);
@@ -59,6 +64,7 @@ var sendMoney = function(prevTxID, payee, amount, callback, network, outputIndex
   };
   //The resulting hex still needs to be copied and pasted into the blockchain inputter on https://blockchain.info/pushtx
 };
+
 // --------------EXAMPLES-----------
 /*
 

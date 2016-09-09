@@ -77,11 +77,6 @@ var changePass = function(model, username, oldPass, newPass, callback){
   });
 }
 
-var preferences = preferencesModel(sequelize);
-var users = usersModel(sequelize);
-
-preferences.belongsTo(users);
-users.hasOne(preferences);
 
 var newUser = function(username, password, callback) {
   bcrypt.genSalt(10, function(err, salt){
@@ -116,7 +111,6 @@ var checkUser = function(username, password, callback) {
 module.exports = {
   users: users,
   findOne: findOne,
-  preferences: preferences,
   db: sequelize,
   findAll: findAll,
   add: add,

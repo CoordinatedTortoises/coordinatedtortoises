@@ -5,6 +5,7 @@ module.exports = function(db) {
     id: { type: 'serial', primaryKey: true },
     username: Sequelize.STRING,
     password: Sequelize.STRING,
-    salt: Sequelize.STRING
+    salt: Sequelize.STRING,
+    preferences: Sequelize.BLOB
   });
 };
