@@ -8,6 +8,7 @@ var url = require('./config/psqlconfig.js')
 var Sequelize = require('sequelize');
 var preferencesModel = require('./preferences.js')
 var usersModel = require('./users.js');
+var bcrypt = require('bcrypt');
 var sequelize = new Sequelize(url,  {
   dialect: 'postgres',
   dialectOptions: {
@@ -82,16 +83,43 @@ var users = usersModel(sequelize);
 preferences.belongsTo(users);
 users.hasOne(preferences);
 
+var newUser = function(username, password, callback) {
+  bcrypt.genSalt(10, function(err, salt){
+    bcrypt.hash(password, salt, console.log, function(err, hashP){
+      users.findOrCreate({
+        where: {
+          username: username,
+          password: hashP,
+          salt: salt
+        }
+      });
+    });
+  });
+};
+
+var checkUser = function(username, password, callback) {
+  findUserByUsername(username, function(err, user){
+    if(err) {
+      throw err;
+    }
+    bcrypt.hash(password, user.salt, console.log, function(err, hashInput){
+      callback(hashInput === user.password);
+    });
+  });
+}
 // add(users, {id:3, username:'stevo', password:'pass'}, console.log);
 // findAll(users, function(users){
 //   console.log(users[1].dataValues);
 // });
 // deleteAll(users, console.log);
 
-
-module.exports.users = users;
-module.exports.findOne = findOne;
-module.exports.preferences = preferences;
-module.exports.db = sequelize;
-module.exports.findAll = findAll;
-module.exports.add = add;
+module.exports = {
+  users: users,
+  findOne: findOne,
+  preferences: preferences,
+  db: sequelize,
+  findAll: findAll,
+  add: add,
+  newUser: newUser,
+  checkUser: checkUser
+};
