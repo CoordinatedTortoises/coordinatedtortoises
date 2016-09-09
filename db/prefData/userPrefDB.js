@@ -152,5 +152,7 @@ module.exports = {
   add: add,
   newUser: newUser,
   checkUser: checkUser,
-  savePref: savePref
+  savePref: savePref,
+  findUserByUsername: findUserByUsername,
+  newUser: newUser
 };
