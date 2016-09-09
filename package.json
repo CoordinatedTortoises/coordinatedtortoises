@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/CoordinatedTortoises/coordinatedtortoises#readme",
   "dependencies": {
+    "bitcoinjs-lib": "^2.3.0",
     "body-parser": "^1.14.1",
+    "browserify": "^13.1.0",
     "express": "^4.13.2",
     "express-session": "^1.14.1",
     "geo-from-ip": "^1.0.6",
@@ -34,6 +36,7 @@
     "python-shell": "^0.4.0",
     "rethinkdbdash": "^2.3.21",
     "sequelize": "^3.24.1",
+    "uglify-js": "^2.7.3",
     "ws": "^1.1.1"
   },
   "devDependencies": {
