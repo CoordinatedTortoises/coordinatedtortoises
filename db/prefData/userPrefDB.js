@@ -34,8 +34,15 @@ var findUser = function(username, password, callback){
       username: username,
       password: password
     }
-  })
-  .then(callback);
+  }).then(function(user) {
+    if (user.length > 0) {
+      callback(user[0].dataValues);
+    } else {
+      callback(undefined);
+    }
+  }).catch(function(err) {
+    console.log(err);
+  });
 };
 
 var findUserByUsername = function(username, callback) {
@@ -43,7 +50,15 @@ var findUserByUsername = function(username, callback) {
     where: {
       username: username,
     }
-  }).then(callback);
+  }).then(function(user) {
+    if (user.length > 0) {
+      callback(user[0].dataValues);
+    } else {
+      callback(undefined);
+    }
+  }).catch(function(err) {
+    console.log(err);
+  });
 };
 
 var add = function(model, options, callback) {
@@ -59,12 +74,10 @@ var deleteAll = function(model, callback) {
 };
 
 var deleteOne = function(model, params, callback) {
-  model.destroy({where: params}).then(function(err){
-    if (err) {
-      throw err;
-    } else {
-      callback();
-    }
+  model.destroy({where: params}).then(function(rows){
+    callback(rows);
+  }).catch(function(err) {
+    console.log(err);
   });
 };
 
@@ -96,13 +109,14 @@ var newUser = function(username, password, callback) {
 };
 
 var checkUser = function(username, password, callback) {
-  findUserByUsername(username, function(err, user){
-    if(err) {
-      throw err;
+  findUserByUsername(username, function(user){
+    if (user !== undefined) {
+      bcrypt.hash(password, user.salt, function(err, hashInput){
+        callback(hashInput === user.password);
+      });
+    } else {
+      callback(false);
     }
-    bcrypt.hash(password, user.salt, console.log, function(err, hashInput){
-      callback(hashInput === user.password);
-    });
   });
 };
 
@@ -123,7 +137,7 @@ var savePref = function(username, preferences, callback) {
 // deleteAll(user, console.log);
 
 
-findAll(sequelize.models.users, console.log);
+//findAll(sequelize.models.users, console.log);
 
 module.exports = {
   users: sequelize.models.users,
