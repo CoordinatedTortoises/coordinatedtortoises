@@ -35,7 +35,15 @@ var findUser = function(username, password, callback){
     }
   })
   .then(callback);
-}
+};
+
+var findUserByUsername = function(username, callback) {
+  model.findAll({
+    where: {
+      username: username,
+    }
+  }).then(callback);
+};
 
 var add = function(model, options, callback) {
   model.findOrCreate({where: options}).then(callback);
