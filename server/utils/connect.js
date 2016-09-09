@@ -46,11 +46,13 @@ ws.onClose(function() {
 });
 
 wss.newConnection(function(ws) {
+
   console.log('New Connection');
+
   var tenMinutesAgo = Date.now() - 60 * 10 * 1000;
 
   db.readHistoricalData('bitcoinData', tenMinutesAgo, function(err, results) {
-    wss.broadcast(JSON.stringify(results));
+    ws.send(JSON.stringify(results));
   });
 
 });
