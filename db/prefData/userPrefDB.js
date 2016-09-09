@@ -6,7 +6,6 @@
 // https://launchschool.com/blog/how-to-install-postgresql-on-a-mac
 var url = require('./config/psqlconfig.js')
 var Sequelize = require('sequelize');
-var preferencesModel = require('./preferences.js')
 var usersModel = require('./users.js');
 var bcrypt = require('bcrypt');
 var sequelize = new Sequelize(url,  {
@@ -74,8 +73,11 @@ var changePass = function(model, username, oldPass, newPass, callback){
       username: username,
       password: oldPass
     }
-  });
+  }).then(callback);
 }
+
+
+var users = usersModel(sequelize);
 
 
 var newUser = function(username, password, callback) {
@@ -85,9 +87,10 @@ var newUser = function(username, password, callback) {
         where: {
           username: username,
           password: hashP,
-          salt: salt
+          salt: salt,
+          preferences: {}
         }
-      });
+      }).then(callback);
     });
   });
 };
@@ -101,6 +104,14 @@ var checkUser = function(username, password, callback) {
       callback(hashInput === user.password);
     });
   });
+};
+
+var savePref = function(username, preferences, callback) {
+  users.update({preferences: preferences}, {
+    where: {
+      username: username
+    }
+  }).then(callback);
 }
 // add(users, {id:3, username:'stevo', password:'pass'}, console.log);
 // findAll(users, function(users){
@@ -113,7 +124,13 @@ module.exports = {
   findOne: findOne,
   db: sequelize,
   findAll: findAll,
+  findUser: findUser,
+  findUserByUsername: findUserByUsername,
+  deleteOne: deleteOne,
+  deleteAll: deleteAll,
+  changePass: changePass,
   add: add,
   newUser: newUser,
-  checkUser: checkUser
+  checkUser: checkUser,
+  savePref: savePref
 };
