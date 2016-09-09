@@ -15,6 +15,7 @@ var sequelize = new Sequelize(url,  {
   }
 });
 
+var users = usersModel(sequelize);
 //Localhost settings
 // var database = 'userPrefs';
 // var opts = {
@@ -28,7 +29,7 @@ var findAll = function(model, callback) {
 };
 
 var findUser = function(username, password, callback){
-  model.findAll({
+  users.findAll({
     where: {
       username: username,
       password: password
@@ -38,7 +39,7 @@ var findUser = function(username, password, callback){
 };
 
 var findUserByUsername = function(username, callback) {
-  model.findAll({
+  users.findAll({
     where: {
       username: username,
     }
@@ -77,7 +78,6 @@ var changePass = function(model, username, oldPass, newPass, callback){
 }
 
 
-var users = usersModel(sequelize);
 
 var newUser = function(username, password, callback) {
   bcrypt.genSalt(10, function(err, salt){
