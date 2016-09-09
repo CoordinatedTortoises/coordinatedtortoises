@@ -21,7 +21,7 @@ var clean = function(transaction) {
 
   return {
     bc: sum / 100000000,
-    time: new Date(transaction.time * 1000),
+    time: transaction.time * 1000,
     ip: transaction.relayed_by,
     coords: coords
   };
