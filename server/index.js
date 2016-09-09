@@ -13,6 +13,8 @@ var bcrypt = require('bcrypt');
 //-------- SERVER & SOCKET SET UP ----------//
 var app = express();
 //var server = require('http').createServer(app);
+//db.add(db.users, {username: 'steee', password: 'noo'}, console.log);
+
 
 // create application/json parser
 var jsonParser = bp.json();
@@ -92,7 +94,7 @@ app.post('/login', function(req, res) {
     //if true, log in
     // else redirect to signup
   //find user by username
-  db.findUserByUsername(un, function(newUser, err) {
+  db.findUserByUsername(db.users, un, function(newUser, err) {
     if (err) {
       console.log('error in finding user: ', err);
     } else {
@@ -134,14 +136,16 @@ app.post('/signup', function(req, res) {
   //   password: passwordToSave
   // };
   //store option in db
-  db.add(db.users, req.body, function(newUser, err) {
-    if (err) {
-      console.log('Error: ', err);
-    } else {
-      console.log(newUser, 'new user!');
-      res.json('saved new user', newUser);
-    }
-  });
+  // db.add(db.users, req.body, function(newUser, err) {
+  //   if (err) {
+  //     console.log('Error: ', err);
+  //   } else {
+  //     console.log(newUser, 'new user!');
+  //     res.json('saved new user', newUser);
+  //   }
+  // });
+  console.log('NEW UESRRRRRRR!!!!!!!!!!!!!');
+  db.newUser(req.username, req.password);
 });
 
 //-------------------------- ROOT -------------------------//
