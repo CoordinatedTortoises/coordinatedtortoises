@@ -23,7 +23,10 @@ var urlencodedParser = bp.urlencoded({ extended: false });
 app.use(urlencodedParser);
 
 //initialize session
-app.use(session({secret: 'secret'}));
+app.use(session({
+  secret: 'secret',
+  saveUninitialized: true
+}));
 
 //serve static assets
 app.use(express.static(__dirname + 'Public'));
@@ -31,8 +34,8 @@ app.use(express.static(__dirname + 'Public'));
 
 var restrict = function(req, res, next) {
   console.log('Inside restrict: ', req.session);
-  if (req.session.username && req.session.password) {
-    next();  
+  if (req.session.username) {
+    next();
   } else {
     res.redirect('/login');
   }
@@ -41,7 +44,7 @@ var restrict = function(req, res, next) {
 
 //-------------------------- ROOT -------------------------//
 app.get('/', restrict, function(req, res) {
-  res.sendfile('Public/index.html');
+  res.sendfile(path.resolve('Public/index.html'));
 });
 
 app.use(session({
@@ -83,37 +86,15 @@ app.get('/login', function(req, res) {
   res.sendfile('Public/login.html');
 });
 
-//new user submitted, add new user to db
 app.post('/login', function(req, res) {
-  //console.log(req.body);
   var un = req.body.username;
   var pw = req.body.password;
 
-  //compare pw and hashed pw
-    //if true, log in
-    // else redirect to signup
-  //find user by username
-  db.findUserByUsername(db.users, un, function(newUser, err) {
-    if (err) {
-      console.log('error in finding user: ', err);
+  db.checkUser(un, pw, function(check) {
+    if (check) {
+      console.log('USER FOUND!!!!!!!!!!!!!!!!!!!');
     } else {
-      //console.log(newUser);
-      //generate salt
-      var salt = bcrypt.genSaltSync(10);
-
-      if (newUser.password === bcrypt.hashSync(pw, salt)) {
-        req.session.regenerate(function(err) {
-          if (err) {
-            console.log('err in starting session: ', err);
-          } else {
-            req.session.username = un;
-            req.session.password = pw;
-            res.redirect('/');    
-          }
-        });
-      } else {
-        res.redirect('/signup');
-      }
+      console.log('USER NOT FOUND!!!!!!!!!!!!!!!!');
     }
   });
 });
@@ -126,7 +107,7 @@ app.get('/signup', function(req, res) {
 
 app.post('/signup', function(req, res) {
   console.log('NEW UESRRRRRRR!!!!!!!!!!!!!');
-  db.newUser(req.body.username, req.body.password, function(err, newUser) {
+  db.newUser(req.body.username, req.body.password, function(newUser, err) {
     if (err) {
       console.log(err, 'Error!');
     } else {
@@ -139,7 +120,7 @@ app.post('/signup', function(req, res) {
 
 //-------------------------- ROOT -------------------------//
 app.get('/', function(req, res) {
-  if (!req.session.username && !req.session.pw) {
+  if (!req.session.username) {
     console.log('redirecting to log in');
     res.redirect('/login');  
   } else {
