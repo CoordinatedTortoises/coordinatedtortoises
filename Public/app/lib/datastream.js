@@ -89,36 +89,72 @@ var initGraph = function () {
 
   var getInputs = function(data) {
     //Convert time
-    data.time = new Date(data.time);
 
-    //Should just run once on first call
-    if (!bucketCount) {
-      bucketCount = data.time;
-    }
+    var keys = Object.keys(data);
+    //This is the historical data
+    if (keys.length > 4 ) {
+      keys.forEach(function(key) {
+        data[key].time = new Date(data[key].time);
+        //console.log(key, data[key].time);
+        //Should just run once on first call
+        console.log(data[key].time);
+        if (!bucketCount) {
+          bucketCount = data[key].time;
+        }
 
-    //Condition to add to the bucket, buckets are 5s for now
-    if (data.time - bucketCount < 3000) {
-      sumIn += data.bc;
-    } else {
-      //Add to volume data
-      console.log(sumIn);
-      volumeData.push({
-        btc: sumIn,
-        date: new Date()
+        //Condition to add to the bucket, buckets are 5s for now
+        if (data[key].time - bucketCount < 3000) {
+          sumIn += data[key].bc;
+        } else {
+          //Add to volume data
+          //console.log(sumIn);
+          volumeData.push({
+            btc: sumIn,
+            date: data[key].time
+          });
+
+          //Reset variables
+          sumIn = 0;
+          bucketCount = data.time;
+        }
+
       });
 
-      //Rerender graph
-      //Call the rendering function
-      if (volumeData.length === 1 ) {
-        render(volumeData);
-      } else {
-        update(volumeData);
-      }
-
-      //Reset variables
-      sumIn = 0;
-      bucketCount = data.time;
+      render(volumeData);
     }
+    console.log(data[54]);
+    data.time = new Date(data.time);
+    console.log(data.time);
+
+
+    // //Should just run once on first call
+    // if (!bucketCount) {
+    //   bucketCount = data.time;
+    // }
+
+    // //Condition to add to the bucket, buckets are 5s for now
+    // if (data.time - bucketCount < 3000) {
+    //   sumIn += data.bc;
+    // } else {
+    //   //Add to volume data
+    //   console.log(sumIn);
+    //   volumeData.push({
+    //     btc: sumIn,
+    //     date: new Date()
+    //   });
+
+    //   //Rerender graph
+    //   //Call the rendering function
+    //   if (volumeData.length === 1 ) {
+    //     render(volumeData);
+    //   } else {
+    //     update(volumeData);
+    //   }
+
+    //   //Reset variables
+    //   sumIn = 0;
+    //   bucketCount = data.time;
+    // }
 
   };
 
@@ -132,6 +168,7 @@ var initGraph = function () {
       console.log('There was an error: ', e);
     };
     bitsocket.onmessage = function(event) {
+      //console.log(event.data.slice(0, 200));
       getInputs(JSON.parse(event.data));
     };
 
