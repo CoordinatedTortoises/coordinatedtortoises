@@ -2,6 +2,8 @@ node_modules/
 bower_components/
 *.log
 psqlconfig.js
+*.DS_Store
+rethinkdb_data/
 
 ## Client side compiled code
 Public/compiled
