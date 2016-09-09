@@ -8,7 +8,6 @@ var path = require('path');
 //var FileStore = require('session-file-store')(session);
 //var pete = require('./workers/serverSocket.js');
 var connect = require('./utils/connect.js');
-var bcrypt = require('bcrypt');
 
 //-------- SERVER & SOCKET SET UP ----------//
 var app = express();
@@ -150,6 +149,7 @@ app.post('/signup', function(req, res) {
       console.log(err, 'Error!');
     } else {
       console.log('New User!!!', newUser);
+      
     }
   });
 });
