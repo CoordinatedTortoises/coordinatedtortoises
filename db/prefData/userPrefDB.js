@@ -143,8 +143,6 @@ var savePref = function(username, preferences, callback) {
 // });
 // deleteAll(user, console.log);
 
-//newUser('tree', 'p', console.log);
-//newUser('apple', 'o', console.log);
 module.exports = {
   users: sequelize.models.users,
   findOne: findOne,
