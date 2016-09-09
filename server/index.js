@@ -25,7 +25,7 @@ app.use(urlencodedParser);
 app.use(session({secret: 'secret'}));
 
 //serve static assets
-app.use(express.static('Public'));
+app.use(express.static(__dirname + 'Public'));
 
 
 var restrict = function(req, res, next) {
@@ -150,7 +150,7 @@ app.get('/', function(req, res) {
     console.log('redirecting to log in');
     res.redirect('/login');  
   } else {
-    res.sendfile(path.resolve('../Public/index.html'));  
+    res.sendfile(path.resolve('Public/index.html'));  
   }
 });
 
@@ -163,7 +163,7 @@ app.get('/logout', function(req, res) {
 });
 
 //serve static assets
-app.use(express.static('../Public'));
+// app.use(express.static('../Public'));
 
 app.listen(3000, function() {
   console.log('server listening at port 3000');
