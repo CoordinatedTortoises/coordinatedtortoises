@@ -6,5 +6,5 @@ module.exports = function(db) {
     password: Sequelize.STRING,
     salt: Sequelize.STRING,
     preferences: Sequelize.BLOB
-  }).sync();
+  });
 };
