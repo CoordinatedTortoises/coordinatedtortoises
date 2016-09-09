@@ -96,6 +96,17 @@ var newUser = function(username, password, callback) {
     });
   });
 };
+
+var checkUser = function(username, password, callback) {
+  findUserByUsername(username, function(err, user){
+    if(err) {
+      throw err;
+    }
+    bcrypt.hash(password, user.salt, console.log, function(err, hashInput){
+      callback(hashInput === user.password);
+    });
+  });
+}
 // add(users, {id:3, username:'stevo', password:'pass'}, console.log);
 // findAll(users, function(users){
 //   console.log(users[1].dataValues);
