@@ -62,61 +62,13 @@ app.get('/', restrict, function(req, res) {
 //----------- user/pref & save pref -------------//
 
 //find a pref as soon as log in, send them back to show on page
-app.get('/users/preferences', restrict, function(req, res) {
-  console.log('now at /users/pref');
-  //get all users from db
-  // if (req.session.username && req.session.password) {
-  //   db.findAll(db.preferences, function(err, prefs) {
-  //     if (err) {
-  //       console.log('Oops! error: ', err);
-  //     } else {
-  //       console.log('Got all user prefs: ', prefs);
-  //       res.json(prefs);
-  //     }
-  //   });  
-  // } else {
-  //   alert('Please log in.');
-  //   res.redirect('/login');
-  // }
-
-  //version without sessions
-
-  //use session variables to lookup just the preferences for that user, 
-  //then send that result back to clinet
-  db.findOne(db.preferences, function(err, allPrefs) {
-    if (err) {
-      console.log('Oops! error: ', err);
-    } else {
-      console.log('Got all user prefs: ', allPrefs);
-      var prefs = allPrefs.toArray();
-      prefs.forEach(function(aPref) {
-        //find matching id to user's
-
-          //update pref
-
-      });
-    }
-  });  
+app.get('/users/preferences', /*restrict,*/ function(req, res) {
+  res.status(200).send();
 });
 
 //update user's pref
 app.post('/users/preferences', restrict, function(req, res) {
-  //console.log(typeof JSON.parse(req.body.prefs), 'parsed body!!!');
-  if (req.session.username && req.session.password) {
-    db.add(db.preferences, JSON.parse(req.body.prefs), function(err, newPref) {
-      if (err) {
-        console.log('Error in getting preferences.', err);
-      } else {
-        console.log('Got preferences.', newPref);
-        var allPrefs = newPref.toArray();
-
-        res.json('saved prefs', newPref);
-      }
-    });
-  } else {
-    console.log('hey. not logged in for /users/preferences');
-    //should redirect to login page.
-  }
+  res.status(200).send();
 });
 
 //------------------------LOGIN--------------------//
