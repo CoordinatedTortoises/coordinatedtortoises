@@ -91,9 +91,15 @@ var changePass = function(model, username, oldPass, newPass, callback) {
 };
 
 var newUser = function(username, password, callback) {
-  bcrypt.genSalt(5, function(err, salt){
+  bcrypt.genSalt(5, function(err, salt) {
+    if (err) {
+      throw err;
+    }
     console.log(salt);
-    bcrypt.hash(password, salt, function(err, hashP){
+    bcrypt.hash(password, salt, function(err, hashP) {
+      if (err) {
+        throw err;
+      }
       sequelize.models.users.findOrCreate({
         where: {
           username: username,
@@ -137,14 +143,8 @@ var savePref = function(username, preferences, callback) {
 // });
 // deleteAll(user, console.log);
 
-
-//findAll(sequelize.models.users, console.log);
-
-
-newUser('tree', 'p', console.log);
-console.log('FIND THE USER!!!!!!!!!!!');
-findAll(sequelize.models.users, console.log);
-
+//newUser('tree', 'p', console.log);
+//newUser('apple', 'o', console.log);
 module.exports = {
   users: sequelize.models.users,
   findOne: findOne,
