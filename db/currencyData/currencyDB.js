@@ -132,7 +132,7 @@ var saveToJSON = function(tableName, filePath, callback){
         }
       });
     }
-  })
+  });
 };
 
 module.exports = {
