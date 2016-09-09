@@ -40,7 +40,7 @@ app.use(urlencodedParser);
 app.use(session({secret: 'secret'}));
 
 //serve static assets
-app.use(express.static('../Public'));
+app.use(express.static('Public'));
 
 
 var restrict = function(req, res, next) {
@@ -55,7 +55,7 @@ var restrict = function(req, res, next) {
 
 //-------------------------- ROOT -------------------------//
 app.get('/', restrict, function(req, res) {
-  res.sendfile(path.resolve('../Public/index.html'));
+  res.sendfile('Public/index.html');
 });
 
 
@@ -123,7 +123,7 @@ app.post('/users/preferences', restrict, function(req, res) {
 
 app.get('/login', function(req, res) {
   console.log('Now at login.');
-  res.sendfile(path.resolve('../Public/login.html'));
+  res.sendfile('Public/login.html');
 });
 
 //new user submitted, add new user to db
@@ -150,7 +150,7 @@ app.post('/login', function(req, res) {
 //--------------------------SIGN UP---------------//
 app.get('/signup', function(req, res) {
   console.log('now at sign up page');
-  res.sendfile(path.resolve('../Public/signup.html'));
+  res.sendfile('Public/signup.html');
 });
 
 app.post('/signup', function(req, res) {

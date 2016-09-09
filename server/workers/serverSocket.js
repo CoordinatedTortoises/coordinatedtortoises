@@ -8,4 +8,8 @@ wss.broadcast = function(data) {
   });
 };
 
+wss.newConnection = function(cb) {
+  wss.on('connection', cb);
+};
+
 module.exports = wss;

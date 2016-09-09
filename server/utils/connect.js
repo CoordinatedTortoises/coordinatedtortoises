@@ -21,7 +21,7 @@ var clean = function(transaction) {
 
   return {
     bc: sum / 100000000,
-    time: new Date(transaction.time * 1000),
+    time: transaction.time * 1000,
     ip: transaction.relayed_by,
     coords: coords
   };
@@ -29,8 +29,7 @@ var clean = function(transaction) {
 };
 
 ws.open(ws.options.newTransactions, function() {
-  console.log('Connected to API');
-  console.log(ws.state());
+  console.log(ws.state() + ' to API');
 });
 
 ws.getData(function(data, flags) {
@@ -46,4 +45,15 @@ ws.onClose(function() {
   console.log(ws.state());
 });
 
-//module.exports.connect = {};
+wss.newConnection(function(ws) {
+
+  console.log('New Connection');
+
+  var tenMinutesAgo = Date.now() - 60 * 10 * 1000;
+
+  db.readHistoricalData('bitcoinData', tenMinutesAgo, function(err, results) {
+    ws.send(JSON.stringify(results));
+  });
+
+});
+

@@ -111,7 +111,7 @@ var insertJSON = function(json, callback){
 
 var readHistoricalData = function(tableName, timestamp, callback){
   //Table is a string, timestamp is an epoch time so in milliseconds since Jan 1, 1970
-  rdash.table(table).filter(rdash.row('time').gt(timestamp)).run(function(err, res){
+  rdash.table(tableName).filter(rdash.row('time').gt(timestamp)).run(function(err, res){
     callback(err, res);
   });
 };
@@ -132,7 +132,7 @@ var saveToJSON = function(tableName, filePath, callback){
         }
       });
     }
-  })
+  });
 };
 
 module.exports = {
