@@ -15,7 +15,6 @@ var sequelize = new Sequelize(url,  {
   }
 });
 
-sequelize.drop();
 //Localhost settings
 // var database = 'userPrefs';
 // var opts = {
