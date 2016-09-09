@@ -8,6 +8,7 @@ var url = require('./config/psqlconfig.js')
 var Sequelize = require('sequelize');
 var preferencesModel = require('./preferences.js')
 var usersModel = require('./users.js');
+var bcrypt = require('bcrypt');
 var sequelize = new Sequelize(url,  {
   dialect: 'postgres',
   dialectOptions: {
@@ -82,6 +83,19 @@ var users = usersModel(sequelize);
 preferences.belongsTo(users);
 users.hasOne(preferences);
 
+var newUser = function(username, password, callback) {
+  bcrypt.genSalt(10, function(err, salt){
+    bcrypt.hash(password, salt, console.log, function(err, hashP){
+      users.findOrCreate({
+        where: {
+          username: username,
+          password: hashP,
+          salt: salt
+        }
+      });
+    });
+  });
+};
 // add(users, {id:3, username:'stevo', password:'pass'}, console.log);
 // findAll(users, function(users){
 //   console.log(users[1].dataValues);

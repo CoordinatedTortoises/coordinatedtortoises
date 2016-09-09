@@ -43,7 +43,7 @@ var checkCost = function(urlList, callback){
 
 //Want to print an easy way for people to make transactions to copy and paste into the block chain
 // bitcoin.Block.calculateMerkleRoot(transaction) //calcutates the merkleRoot of a transaction
-var sendMoney = function(prevTxID, payee, amount, callback, outputIndex) {
+var sendMoney = function(prevTxID, payee, amount, callback, network, outputIndex) {
   //@prevTxID is the id of the previous transaction,
   //@Payee is the address of the person you're sending money to
   //@amount is amount in satoshis
@@ -59,8 +59,6 @@ var sendMoney = function(prevTxID, payee, amount, callback, outputIndex) {
   };
   //The resulting hex still needs to be copied and pasted into the blockchain inputter on https://blockchain.info/pushtx
 };
-
-
 // --------------EXAMPLES-----------
 /*
 

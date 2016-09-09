@@ -4,6 +4,7 @@ module.exports = function(db) {
   return db.define('user', {
     id: { type: 'serial', primaryKey: true },
     username: Sequelize.STRING,
-    password: Sequelize.STRING
+    password: Sequelize.STRING,
+    salt: Sequelize.STRING
   });
 };
