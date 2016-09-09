@@ -4,7 +4,7 @@
 
 // https://github.com/dresende/node-orm2
 // https://launchschool.com/blog/how-to-install-postgresql-on-a-mac
-var url = require('./config/psqlconfig.js')
+var url = require('./config/psqlconfig.js');
 var Sequelize = require('sequelize');
 var usersModel = require('./users.js');
 var bcrypt = require('bcrypt');
@@ -65,8 +65,8 @@ var deleteOne = function(model, params, callback) {
     } else {
       callback();
     }
-  })
-}
+  });
+};
 
 var changePass = function(model, username, oldPass, newPass, callback){
   model.update({password: newPass}, {
@@ -75,7 +75,7 @@ var changePass = function(model, username, oldPass, newPass, callback){
       password: oldPass
     }
   }).then(callback);
-}
+};
 
 
 
@@ -112,10 +112,13 @@ var savePref = function(username, preferences, callback) {
       username: username
     }
   }).then(callback);
-}
+};
 // add(user, {id:3, username:'stevo', password:'pass'}, console.log);
 // findAll(user, function(user){
 //   console.log(user[1].dataValues);
+// add(users, {id:3, username:'stevo', password:'pass'}, console.log);
+// findAll(users, function(users){
+//   console.log(users[1].dataValues);
 // });
 // deleteAll(user, console.log);
 
