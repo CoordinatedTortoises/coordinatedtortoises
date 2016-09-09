@@ -14,8 +14,6 @@ var bcrypt = require('bcrypt');
 var app = express();
 //var server = require('http').createServer(app);
 
-db.findOne(db.users, {username: 'steve', password: 'pass'}, console.log('HEYYYYYY!!!!!'));
-
 // create application/json parser
 var jsonParser = bp.json();
 // create application/x-www-form-urlencoded parser
@@ -94,10 +92,9 @@ app.post('/login', function(req, res) {
     //if true, log in
     // else redirect to signup
   //find user by username
-  db.findOne(db.users, un, function(newUser, err) {
+  db.findUserByUsername(un, function(newUser, err) {
     if (err) {
       console.log('error in finding user: ', err);
-      res.redirect('/signup');
     } else {
       //console.log(newUser);
       //generate salt
@@ -127,17 +124,17 @@ app.get('/signup', function(req, res) {
 });
 
 app.post('/signup', function(req, res) {
-  var un = req.body.username;
-  var pw = req.body.password;
+  //var un = req.body.username;
+  //var pw = req.body.password;
   //generate hash password
-  var passwordToSave = bcrypt.hashSync(pw, salt);
+  //var passwordToSave = bcrypt.hashSync(pw, salt);
 
-  var option = {
-    username: un,
-    password: passwordToSave
-  };
+  // var option = {
+  //   username: un,
+  //   password: passwordToSave
+  // };
   //store option in db
-  db.add(db.users, option, function(newUser, err) {
+  db.add(db.users, req.body, function(newUser, err) {
     if (err) {
       console.log('Error: ', err);
     } else {
