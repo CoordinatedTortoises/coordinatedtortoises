@@ -8,10 +8,13 @@ var path = require('path');
 //var FileStore = require('session-file-store')(session);
 //var pete = require('./workers/serverSocket.js');
 var connect = require('./utils/connect.js');
+var bcrypt = require('bcrypt');
 
 //-------- SERVER & SOCKET SET UP ----------//
 var app = express();
 //var server = require('http').createServer(app);
+
+db.findOne(db.users, {username: 'steve', password: 'pass'}, console.log('HEYYYYYY!!!!!'));
 
 // create application/json parser
 var jsonParser = bp.json();
@@ -45,8 +48,6 @@ app.get('/', restrict, function(req, res) {
 app.use(session({
   secret: 'secret'
 }));
-
-
 
 // var restrict = function(req, res, next) {
 //   console.log('Inside restrict: ', req.session);
@@ -89,13 +90,20 @@ app.post('/login', function(req, res) {
   var un = req.body.username;
   var pw = req.body.password;
 
-  db.findOne(db.users, req.body, function(newUser, err) {
+  //compare pw and hashed pw
+    //if true, log in
+    // else redirect to signup
+  //find user by username
+  db.findOne(db.users, un, function(newUser, err) {
     if (err) {
       console.log('error in finding user: ', err);
       res.redirect('/signup');
     } else {
-      console.log(newUser);
-      if (newUser) {
+      //console.log(newUser);
+      //generate salt
+      var salt = bcrypt.genSaltSync(10);
+
+      if (newUser.password === bcrypt.hashSync(pw, salt)) {
         req.session.regenerate(function(err) {
           if (err) {
             console.log('err in starting session: ', err);
@@ -119,9 +127,17 @@ app.get('/signup', function(req, res) {
 });
 
 app.post('/signup', function(req, res) {
-  //check how to access in req the username and pw, store in var
-  //add new user to db
-  db.add(db.users, req.body, function(newUser, err) {
+  var un = req.body.username;
+  var pw = req.body.password;
+  //generate hash password
+  var passwordToSave = bcrypt.hashSync(pw, salt);
+
+  var option = {
+    username: un,
+    password: passwordToSave
+  };
+  //store option in db
+  db.add(db.users, option, function(newUser, err) {
     if (err) {
       console.log('Error: ', err);
     } else {
