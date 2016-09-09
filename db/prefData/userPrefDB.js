@@ -61,8 +61,6 @@ var findUserByUsername = function(username, callback) {
   });
 };
 
-findUserByUsername('tree', console.log);
-
 var add = function(model, options, callback) {
   model.findOrCreate({where: options}).then(callback);
 };
@@ -91,8 +89,6 @@ var changePass = function(model, username, oldPass, newPass, callback) {
     }
   }).then(callback);
 };
-
-
 
 var newUser = function(username, password, callback) {
   bcrypt.genSalt(5, function(err, salt){
@@ -143,6 +139,11 @@ var savePref = function(username, preferences, callback) {
 
 
 //findAll(sequelize.models.users, console.log);
+
+
+newUser('tree', 'p', console.log);
+console.log('FIND THE USER!!!!!!!!!!!');
+findAll(sequelize.models.users, console.log);
 
 module.exports = {
   users: sequelize.models.users,

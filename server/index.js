@@ -131,6 +131,8 @@ app.post('/signup', function(req, res) {
       console.log(err, 'Error!');
     } else {
       console.log('New User!!!', newUser);
+      req.session.username = req.body.username;
+      res.redirect('/');
     }
   });
 });
@@ -141,7 +143,7 @@ app.get('/', function(req, res) {
     console.log('redirecting to log in');
     res.redirect('/login');  
   } else {
-    res.sendfile(path.resolve('Public/index.html'));  
+    res.sendfile(path.resolve('Public/index.html'));
   }
 });
 
