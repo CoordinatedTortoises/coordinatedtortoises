@@ -15,7 +15,7 @@ var sequelize = new Sequelize(url,  {
   }
 });
 
-var users = usersModel(sequelize);
+usersModel(sequelize);
 //Localhost settings
 // var database = 'userPrefs';
 // var opts = {
@@ -28,8 +28,9 @@ var findAll = function(model, callback) {
   model.findAll({}).then(callback);
 };
 
+findAll(sequelize.models.users, console.log);
 var findUser = function(username, password, callback){
-  users.findAll({
+  sequelize.models.users.findAll({
     where: {
       username: username,
       password: password
@@ -39,7 +40,7 @@ var findUser = function(username, password, callback){
 };
 
 var findUserByUsername = function(username, callback) {
-  users.findAll({
+  sequelize.models.users.findAll({
     where: {
       username: username,
     }
@@ -83,7 +84,7 @@ var newUser = function(username, password, callback) {
   bcrypt.genSalt(10, function(err, salt){
     console.log(salt);
     bcrypt.hash(password, salt, null, function(err, hashP){
-      users.findOrCreate({
+      sequelize.models.users.findOrCreate({
         where: {
           username: username,
           password: hashP,
@@ -107,20 +108,20 @@ var checkUser = function(username, password, callback) {
 };
 
 var savePref = function(username, preferences, callback) {
-  users.update({preferences: preferences}, {
+  sequelize.models.users.update({preferences: preferences}, {
     where: {
       username: username
     }
   }).then(callback);
 }
-// add(users, {id:3, username:'stevo', password:'pass'}, console.log);
-// findAll(users, function(users){
-//   console.log(users[1].dataValues);
+// add(user, {id:3, username:'stevo', password:'pass'}, console.log);
+// findAll(user, function(user){
+//   console.log(user[1].dataValues);
 // });
-// deleteAll(users, console.log);
+// deleteAll(user, console.log);
 
 module.exports = {
-  users: users,
+  users: sequelize.models.users,
   findOne: findOne,
   db: sequelize,
   findAll: findAll,
