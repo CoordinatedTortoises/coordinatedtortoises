@@ -61,6 +61,8 @@ var findUserByUsername = function(username, callback) {
   });
 };
 
+findUserByUsername('tree', console.log);
+
 var add = function(model, options, callback) {
   model.findOrCreate({where: options}).then(callback);
 };
@@ -108,7 +110,7 @@ var newUser = function(username, password, callback) {
   });
 };
 
-//newUser('test', 'test');
+
 
 var checkUser = function(username, password, callback) {
   findUserByUsername(username, function(user){
