@@ -13,8 +13,9 @@ var sequelize = new Sequelize(url,  {
   dialectOptions: {
     ssl: true
   }
-  });
+});
 
+sequelize.drop();
 //Localhost settings
 // var database = 'userPrefs';
 // var opts = {
@@ -79,10 +80,10 @@ var changePass = function(model, username, oldPass, newPass, callback){
 
 var users = usersModel(sequelize);
 
-
 var newUser = function(username, password, callback) {
   bcrypt.genSalt(10, function(err, salt){
-    bcrypt.hash(password, salt, console.log, function(err, hashP){
+    console.log(salt);
+    bcrypt.hash(password, salt, null, function(err, hashP){
       users.findOrCreate({
         where: {
           username: username,
