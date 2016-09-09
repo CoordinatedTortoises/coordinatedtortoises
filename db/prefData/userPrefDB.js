@@ -8,7 +8,7 @@ var url = require('./config/psqlconfig.js');
 var Sequelize = require('sequelize');
 var usersModel = require('./users.js');
 var bcrypt = require('bcrypt');
-var sequelize = new Sequelize(url,  {
+var sequelize = new Sequelize(url, {
   dialect: 'postgres',
   dialectOptions: {
     ssl: true
@@ -81,7 +81,7 @@ var deleteOne = function(model, params, callback) {
   });
 };
 
-var changePass = function(model, username, oldPass, newPass, callback){
+var changePass = function(model, username, oldPass, newPass, callback) {
   model.update({password: newPass}, {
     where: {
       username: username,
@@ -108,6 +108,8 @@ var newUser = function(username, password, callback) {
   });
 };
 
+//newUser('test', 'test');
+
 var checkUser = function(username, password, callback) {
   findUserByUsername(username, function(user){
     if (user !== undefined) {
@@ -130,6 +132,7 @@ var savePref = function(username, preferences, callback) {
 // add(user, {id:3, username:'stevo', password:'pass'}, console.log);
 // findAll(user, function(user){
 //   console.log(user[1].dataValues);
+
 // add(users, {id:3, username:'stevo', password:'pass'}, console.log);
 // findAll(users, function(users){
 //   console.log(users[1].dataValues);
