@@ -39,6 +39,25 @@ var deleteAll = function(model, callback) {
   model.destroy({where: {}}).then(callback);
 };
 
+var deleteOne = function(model, params, callback) {
+  model.destroy({where: params}).then(function(err){
+    if (err) {
+      throw err;
+    } else {
+      callback();
+    }
+  })
+}
+
+var changePass = function(model, username, oldPass, newPass, callback){
+  model.update({password: newPass}, {
+    where: {
+      username: username,
+      password: oldPass
+    }
+  });
+}
+
 var preferences = preferencesModel(sequelize);
 var users = usersModel(sequelize);
 

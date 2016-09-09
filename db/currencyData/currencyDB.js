@@ -11,6 +11,7 @@ var rdash = require('rethinkdbdash')({
   timeout: 10
 });
 
+var fs = require('fs');
 
 rdash.dbList().contains('currencyData')
   .do(function(exists) {
@@ -101,6 +102,39 @@ var getTableList = function(callback){
   });
 };
 
+var insertJSON = function(json, callback){
+  var data = JSON.parse(json);
+  data.forEach(function(transaction/*?*/){
+    addData(transaction, callback);
+  });
+};
+
+var readHistoricalData = function(tableName, timestamp, callback){
+  //Table is a string, timestamp is an epoch time so in milliseconds since Jan 1, 1970
+  rdash.table(table).filter(rdash.row('time').gt(timestamp)).run(function(err, res){
+    callback(err, res);
+  });
+};
+
+var saveToJSON = function(tableName, filePath, callback){
+  //Callback occurs when the data has been saved
+  var jsonData;
+  getAll(tableName, function(err, res){
+    if(err){
+      throw err;
+    } else {
+      jsonData = JSON.stringify(res);
+      fs.writeFile(filePath, jsonData, function(err){
+        if(err){
+          throw err;
+        } else {
+          callback();
+        }
+      });
+    }
+  })
+};
+
 module.exports = {
   addData: addData,
   readChanges: readChanges,
@@ -109,8 +143,15 @@ module.exports = {
   deleteAll: deleteAll,
   getAll: getAll,
   reql: rdash,
+  insertJSON: insertJSON,
+  readHistoricalData: readHistoricalData,
+  saveToJSON: saveToJSON,
   getTableList: getTableList
 };
+
+// getAll('bitcoinData', function(err, res){
+//   console.log(res);
+// });
 // module.exports.readChanges(console.log);
 // readLimitedChanges({index: 'id'}, 3, console.log);
 // getLimited({index: 'id'}, 3, console.log);
