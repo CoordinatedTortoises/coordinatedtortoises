@@ -113,10 +113,13 @@ var checkUser = function(username, password, callback) {
 // });
 // deleteAll(users, console.log);
 
-
-module.exports.users = users;
-module.exports.findOne = findOne;
-module.exports.preferences = preferences;
-module.exports.db = sequelize;
-module.exports.findAll = findAll;
-module.exports.add = add;
+module.exports = {
+  users: users,
+  findOne: findOne,
+  preferences: preferences,
+  db: sequelize,
+  findAll: findAll,
+  add: add,
+  newUser: newUser,
+  checkUser: checkUser
+};
