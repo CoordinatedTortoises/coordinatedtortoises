@@ -11,9 +11,10 @@ class App extends React.Component {
         val: 'BTC'
       },
       resolution: {
-        test: 'Resolution: 10min',
+        text: 'Resolution: 10min',
         val: 10
       },
+      exchange: {},
       synced: false
     };
   }
@@ -21,6 +22,12 @@ class App extends React.Component {
   //Define class methods here. A couple ones used in the sprint were rendering and lifecycle events
   //render is necessary to display the JSX supplied to the DOM!
   //componenetDidMount is called once for every
+  componentDidMount() {
+    console.log('It mounted: ', this.props);
+
+    //this.getPrefs(this.props.graph.init);
+    this.props.graph.init();
+  }
 
   synced() {
     this.setState({
@@ -34,10 +41,8 @@ class App extends React.Component {
     }.bind(this));
   }
 
-  componentDidMount() {
-    console.log('It mounted');
-    this.props.graph.init();
-  }
+
+
 
   savePrefs(callback) {
     console.log('Saving prefs now', this.state);
@@ -55,15 +60,27 @@ class App extends React.Component {
     });
   }
 
-  getPrefs() {
-    console.log('Saving prefs now', this.state);
+
+
+  getPrefs(callback) {
+    console.log('Getting prefs now', this.state);
 
     var context = this;
 
     $.ajax({
       url: 'http://localhost:3000/users/preferences',
       method: 'GET',
-      success: (data) => callback(data),
+      success: (data) => callback(JSON.parse(data)),
+      error: (error) => console.log('An error occurred!: ', error)
+    });
+  }
+
+  getExchange(callback) {
+    //use blockchain api to get most up to date exchange prices
+    $.ajax({
+      url: 'https://blockchain.info/ticker?cors=true',
+      method: 'GET',
+      success: (data) => callback((data)),
       error: (error) => console.log('An error occurred!: ', error)
     });
   }
@@ -79,12 +96,24 @@ class App extends React.Component {
     });
 
     //Pass the state into our change axis function from dataStream.js
-    this.props.
-    console.log(curr);
+    
+    this.getExchange((data) => console.log(data));
+    //this.props.graph.rescale(curr);
+    console.log(this, curr);
   }
 
   resHandler(res) {
-    console.log(res);
+    console.log(this, res);
+
+    this.setState({
+      resolution: {
+        text: 'Resolution: ' + res + 'min',
+        val: res
+      }
+    });
+
+
+
   }
 
 
@@ -106,7 +135,7 @@ class App extends React.Component {
           <NavBar logout={this.logout} savePrefs={this.savePrefs.bind(this)} synced={this.synced.bind(this)} />
         </div>
         <div className="col-md-8">    
-          <Main currencyState={this.state.currency.text} resState={this.state.resolution.text}. currHandler={this.currencyHandler} resHandler={this.resHandler}/>
+          <Main currencyState={this.state.currency.text} resState={this.state.resolution.text} currHandler={this.currencyHandler.bind(this)} resHandler={this.resHandler.bind(this)}/>
         </div>
       </div>
     );

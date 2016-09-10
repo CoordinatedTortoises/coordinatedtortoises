@@ -2,6 +2,6 @@
 
 //var crypto = crypt;
 
-ReactDOM.render(<App initGraph={window.initGraph}/>, document.getElementById('app'));
+ReactDOM.render(<App graph={window.graph}/>, document.getElementById('app'));
 
 //Pass in top level props above

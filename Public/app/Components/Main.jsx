@@ -7,17 +7,17 @@ var Main = ({currencyState, resState, currHandler, resHandler}) => (
     <div className="panel-body main-graph">
     </div>
     <div className="panel-footer">
-      <div className="btn-group">
+      <div className="btn-group user-pref">
         <button type="button" className="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {currencyState}<span className="caret"></span>
         </button>
         <ul className="dropdown-menu">
           <li><a onClick={() => currHandler('BTC')}>Bitcoin (BTC)</a></li>
-          <li><a onClick={() => currHandler('usd')}>US Dollars ($)</a></li>
-          <li><a onClick={() => currHandler('jpy')}>Japanese Yen (¥)</a></li>
+          <li><a onClick={() => currHandler('USD')}>US Dollars ($)</a></li>
+          <li><a onClick={() => currHandler('JPY')}>Japanese Yen (¥)</a></li>
         </ul>
       </div>
-      <div className="btn-group">
+      <div className="btn-group user-pref">
         <button type="button" className="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           {resState}<span className="caret"></span>
         </button>

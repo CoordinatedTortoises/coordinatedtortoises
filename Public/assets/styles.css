@@ -51,3 +51,7 @@ svg {
   stroke: steelblue;
   stroke-width: 1.5px;
 }
+
+.user-pref {
+  margin-right: 15px
+}
