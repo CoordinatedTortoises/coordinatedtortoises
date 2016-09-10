@@ -13,12 +13,13 @@ class App extends React.Component {
         val: 'BTC'
       },
       resolution: {
-        text: 'Resolution: 10min',
+        text: 'Resolution: all',
         val: 'all'
       },
       exchange: {
         BTC: {
-          last: 1
+          last: 1,
+          symbol: 'BTC'
         }
       },
       synced: false
@@ -29,9 +30,10 @@ class App extends React.Component {
   componentDidMount() {
     console.log('It mounted: ', this.props);
 
+    //Set state must be async? When passing this.state instead of data it the old defaults
     this.getPrefs((data) => {
       this.setState(data);
-      this.props.graph.init(this.state);
+      this.props.graph.init(data);
     });
     //this.props.graph.init(this.state);
   }
@@ -77,19 +79,23 @@ class App extends React.Component {
     var context = this;
 
     //This is a mock for simulating the AJAX call until its working
-
     callback({
       currency: {
         text: 'Currency: USD',
         val: 'USD'
       },
       resolution: {
-        text: 'Resolution: all',
-        val: 'all'
+        text: 'Resolution: 1min',
+        val: 1
       },
       exchange: {
         BTC: {
-          last: 660
+          last: 1,
+          symbol: 'BTC'
+        },
+        USD: {
+          last: 660,
+          symbol: '$'
         }
       },
       synced: false

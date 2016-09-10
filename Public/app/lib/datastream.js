@@ -6,7 +6,7 @@ var firstBool = true;
 var volumeData = [];
 //Defaults
 var currentCurrency = 'BTC';
-var timeRes = 10;
+var maxLen = 10 * 20; //10 min;
 var convert = 1;
 
 //All the graph related stuff must be held in the top level too
@@ -41,7 +41,7 @@ var line = d3.svg.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.btc); });
 
-var render = function(data) {
+var render = function(data, symbol) {
 
   var svg = d3.select('.main-graph').append('svg')
       .attr('width', width + margin.left + margin.right)
@@ -65,7 +65,7 @@ var render = function(data) {
       .attr('y', 6)
       .attr('dy', '.71em')
       .style('text-anchor', 'end')
-      .text('Volume (BTC)');
+      .text('Volume (' + symbol + ')');
 
   svg.append('path')
       .attr('class', 'line')
@@ -86,7 +86,14 @@ var update = function(data, dur) {
 };
 
 
-var initGraph = function () {
+var initGraph = function (prefs) {
+
+  console.log('Inside initGraph: ', prefs.exchange);
+  //Prefs to deal with --> currency and time scale
+
+  currentCurrency = prefs.currency.val;
+  convert = prefs.exchange[currentCurrency].last;
+
 
   var processData = function(data) {
     //Convert
@@ -133,7 +140,7 @@ var initGraph = function () {
         processData(data[key]);
       });
       firstBool = false;
-      render(volumeData);
+      render(volumeData, prefs.exchange[currentCurrency].symbol);
 
     } else if (!firstBool) {
       processData(data);
