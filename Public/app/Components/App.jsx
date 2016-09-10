@@ -1,4 +1,6 @@
 class App extends React.Component {
+
+  //What happens on instantiation
   constructor(props) {
 
     //Short hand for calling React.component.call(props)
@@ -14,36 +16,45 @@ class App extends React.Component {
         text: 'Resolution: 10min',
         val: 'all'
       },
-      exchange: {},
+      exchange: {
+        BTC: {
+          last: 1
+        }
+      },
       synced: false
     };
   }
 
-  //Define class methods here. A couple ones used in the sprint were rendering and lifecycle events
-  //render is necessary to display the JSX supplied to the DOM!
-  //componenetDidMount is called once for every
+  //componenetDidMount is called once for the very first render
   componentDidMount() {
     console.log('It mounted: ', this.props);
 
-    //this.getPrefs(this.props.graph.init);
-    this.props.graph.init();
+    this.getPrefs((data) => {
+      this.setState(data);
+      this.props.graph.init(this.state);
+    });
+    //this.props.graph.init(this.state);
   }
 
+  //Used to visually display a successful save
   synced() {
     this.setState({
       synced: true
     });
 
-    setTimeout(3000, function() {
+    console.log(setTimeout);
+
+    setTimeout(function() {
+      console.log(this.state);
       this.setState({
         synced: false
       });
-    }.bind(this));
+    }.bind(this), 3000);
   }
 
 
 
-
+  //AJAX Methods
   savePrefs(callback) {
     console.log('Saving prefs now', this.state);
 
@@ -52,9 +63,7 @@ class App extends React.Component {
     $.ajax({
       url: 'http://localhost:3000/users/preferences',
       method: 'POST',
-      data: {
-        prefs: JSON.stringify(this.state)
-      },
+      data: JSON.stringify(this.state),
       success: (data) => callback(data),
       error: (error) => console.log('An error occurred!: ', error)
     });
@@ -67,13 +76,37 @@ class App extends React.Component {
 
     var context = this;
 
-    $.ajax({
-      url: 'http://localhost:3000/users/preferences',
-      method: 'GET',
-      success: (data) => callback(JSON.parse(data)),
-      error: (error) => console.log('An error occurred!: ', error)
+    //This is a mock for simulating the AJAX call until its working
+
+    callback({
+      currency: {
+        text: 'Currency: USD',
+        val: 'USD'
+      },
+      resolution: {
+        text: 'Resolution: all',
+        val: 'all'
+      },
+      exchange: {
+        BTC: {
+          last: 660
+        }
+      },
+      synced: false
     });
+
+    //DONT DELETE THIS, WE NEED IT LATER *******************************
+    //
+    // $.ajax({
+    //   url: 'http://localhost:3000/users/preferences',
+    //   method: 'GET',
+    //   success: (data) => callback(JSON.parse(data)),
+    //   error: (error) => console.log('An error occurred!: ', error)
+    // });
+    //******************************************************************
   }
+
+
 
   getExchange(callback) {
     //use blockchain api to get most up to date exchange prices
@@ -123,7 +156,7 @@ class App extends React.Component {
     return (
       <div className="target">
         <div className="col-md-4">    
-          <NavBar logout={this.logout} savePrefs={this.savePrefs.bind(this)} synced={this.synced.bind(this)} />
+          <NavBar logout={this.logout} savePrefs={this.savePrefs.bind(this)} synced={this.synced.bind(this)} syncState={this.state.synced} />
         </div>
         <div className="col-md-8">    
           <Main currencies={this.props.currencies} currencyState={this.state.currency.text} resState={this.state.resolution.text} currHandler={this.currencyHandler.bind(this)} resHandler={this.resHandler.bind(this)}/>

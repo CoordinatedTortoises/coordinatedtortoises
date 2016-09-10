@@ -30,10 +30,4 @@ var Main = ({currencies, currencyState, resState, currHandler, resHandler}) => (
   </div>
 );
 
-// <li><a onClick={() => currHandler('BTC')}>Bitcoin (BTC)</a></li>
-// <li><a onClick={() => currHandler('USD')}>US Dollars ($)</a></li>
-// <li><a onClick={() => currHandler('JPY')}>Japanese Yen (¥)</a></li>
-
-
-
 window.Main = Main;
