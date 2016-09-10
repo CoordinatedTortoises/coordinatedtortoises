@@ -21,7 +21,14 @@ var bitcoin = require('bitcoinjs-lib');
 var request = require('request');
 var blockchain = require('blockchain.info');
 
-
+/*
+IMPORTANT
+ALL BLOCKCHAIN FUNCTIONS AS LAST PARAM SHOULD INCLUDE AN API CODE
+{
+apiCode: 'actualcode'
+}
+OR THEY MIGHT BREAK EVENTUALLY
+*/
 //UrlList should similar to [{url: "https://mkt.21.co/21dotco/zip_code_data/zipdata/collect?zip_code=94109"}, {url:"https://mkt.21.co/21dotco/extract_links/web_links/collect?url=https://21.co"}]
 var checkCost21Services = function(urlList, callback){
   getCost = new PythonShell('checkpay.py');
@@ -51,8 +58,14 @@ var getUnspent = function(address, callback) {
   blockchain.blockexplorer.getUnspentOutputs('1Gokm82v6DmtwKEB8AiVhm82hyFSsEvBDK'/* We need to add an API key here in an object */).then(function(unspent) {
     callback(unspent);
   });
-}
+};
 
+
+var getExchangeRates = function (callback) {
+  blockchain.exchange.getTicker().then(function(rates) {
+    callback(rates);
+  });
+}
 //Want to print an easy way for people to make transactions to copy and paste into the block chain
 // bitcoin.Block.calculateMerkleRoot(transaction) //calcutates the merkleRoot of a transaction
 var sendMoney = function(prevTxID, payee, amount, callback, network, outputIndex) {
@@ -119,6 +132,7 @@ console.log(tx.build().toHex())
 module.exports = {
   checkCost: checkCost21Services,
   sendMoney: sendMoney,
+  getExchangeRates: getExchangeRates,
   getUnspent: getUnspent
 };
 
