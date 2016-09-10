@@ -63,12 +63,16 @@ app.get('/', restrict, function(req, res) {
 
 //find a pref as soon as log in, send them back to show on page
 app.get('/users/preferences', /*restrict,*/ function(req, res) {
-  res.status(200).send();
+  db.findUserByUsername(req.session.username, function(user) {
+    res.status(200).send(JSON.stringify(user.preferences));
+  });
 });
 
 //update user's pref
 app.post('/users/preferences', restrict, function(req, res) {
-  res.status(200).send();
+  db.savePref(req.session.username, req.body.preferences, function() {
+    res.status(200).send();
+  });
 });
 
 //------------------------LOGIN--------------------//
