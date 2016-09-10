@@ -141,8 +141,6 @@ class App extends React.Component {
       });
       this.props.graph.rescale(curr, data);
     });
-    //this.props.graph.rescale(curr);
-    console.log(this, curr);
   }
 
   resHandler(res) {
@@ -154,6 +152,8 @@ class App extends React.Component {
         val: res
       }
     });
+
+    this.props.graph.updateRes(res);
   }
 
 

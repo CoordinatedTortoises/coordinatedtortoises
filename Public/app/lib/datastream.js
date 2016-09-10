@@ -38,6 +38,7 @@ var yAxis = d3.svg.axis()
     .orient('left');
 
 var line = d3.svg.line()
+    //.interpolate('basis')
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.btc); });
 
@@ -93,6 +94,11 @@ var initGraph = function (prefs) {
 
   currentCurrency = prefs.currency.val;
   convert = prefs.exchange[currentCurrency].last;
+  if (typeof prefs.resolution.val === 'string') {
+    maxLen = undefined;
+  } else {
+    maxLen = prefs.resolution.val * 20;
+  }
 
 
   var processData = function(data) {
@@ -119,7 +125,14 @@ var initGraph = function (prefs) {
 
       //Rerender graph
       if (!firstBool) {
-        update(volumeData, 3000);
+        //Get just the times in the resolution we are working in
+        if (maxLen) {
+          var shownData = volumeData.slice(-maxLen);
+        } else {
+          var shownData = volumeData;
+        }
+        console.log('MaxLen: ', maxLen, shownData);
+        update(shownData, 3000);
       }
 
       //Reset variables
@@ -168,7 +181,17 @@ var initGraph = function (prefs) {
 
 };
 
-var clearGraph = function() {
+var updateRes = function(res) {
+
+  if (res === 'all') {
+    maxLen = undefined;
+    var shownData = volumeData;
+  } else {
+    maxLen = res * 20;
+    var shownData = volumeData.slice(-maxLen);
+  }
+
+  update(shownData, 500);
 
 };
 
@@ -199,9 +222,7 @@ var rescaleAxis = function(currency, exchange) {
 };
 
 window.graph = {
-
   init: initGraph,
   rescale: rescaleAxis,
-  clear: clearGraph
-
+  updateRes: updateRes
 };
