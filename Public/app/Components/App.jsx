@@ -5,10 +5,8 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      prefs: {
-        testData: 'blah blah blah',
-        displayBitcoins: true
-      },
+      currency: 'Currency',
+      resolution: 'Resolution',
       synced: false
     };
   }
@@ -62,7 +60,13 @@ class App extends React.Component {
     });
   }
 
-  serverReqs() {}
+  currencyHandler(curr) {
+    console.log(curr);
+  }
+
+  resHandler(res) {
+    console.log(res);
+  }
 
 
 
@@ -83,7 +87,7 @@ class App extends React.Component {
           <NavBar logout={this.logout} savePrefs={this.savePrefs.bind(this)} synced={this.synced.bind(this)} />
         </div>
         <div className="col-md-8">    
-          <Main />
+          <Main currencyState={this.state.currency} resState={this.state.resolution} currHandler={this.currencyHandler} resHandler={this.resHandler}/>
         </div>
       </div>
     );
