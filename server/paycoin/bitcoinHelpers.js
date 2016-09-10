@@ -45,8 +45,13 @@ var checkCost21Services = function(urlList, callback){
 var receiveNotifs = function(BIP32pub) {
   //This function will hopefully be able to allow users to get notifications for their transactions
   var getNotifs = new bitcoin.Receive(BIP32pub, /* Where we are going to receive the notifications for each transaction */ 'http://localhost:8000/r/notifs', 'API KEY WILL GO HERE');
-}
+};
 
+var getUnspent = function(address, callback) {
+  blockchain.blockexplorer.getUnspentOutputs('1Gokm82v6DmtwKEB8AiVhm82hyFSsEvBDK'/* We need to add an API key here in an object */).then(function(unspent) {
+    callback(unspent);
+  });
+}
 
 //Want to print an easy way for people to make transactions to copy and paste into the block chain
 // bitcoin.Block.calculateMerkleRoot(transaction) //calcutates the merkleRoot of a transaction
@@ -113,7 +118,8 @@ console.log(tx.build().toHex())
 // checkCost([{url: "https://mkt.21.co/21dotco/zip_code_data/zipdata/collect?zip_code=94109"}, {url:"https://mkt.21.co/21dotco/extract_links/web_links/collect?url=https://21.co"}], console.log);
 module.exports = {
   checkCost: checkCost21Services,
-  sendMoney: sendMoney
+  sendMoney: sendMoney,
+  getUnspent: getUnspent
 };
 
 
