@@ -5,7 +5,7 @@ var mo = require('method-override');
 var db = require('../db/prefData/userPrefDB.js');
 var session = require('express-session');
 var path = require('path');
-//var FileStore = require('session-file-store')(session);
+
 //var pete = require('./workers/serverSocket.js');
 var connect = require('./utils/connect.js');
 
@@ -54,7 +54,28 @@ app.use(express.static('Public'));
 //   // });
 // };
 
-//app.use(restrict);
+//-------------------------- ROOT -------------------------//
+app.get('/', function(req, res) {
+  if (!req.session.user) {
+    res.redirect('/login');
+  } else {
+    res.redirect('/');
+  }
+});
+
+// app.use(path, function(req, res) {
+//   console.log(req, 'RQQQQQQQQQ');
+//   if (req.url === '/') {
+//     console.log('why DONT YOU SEE MEE!!!!!!!!!!>!>>!HEREERERE');
+//   } else {
+//     console.log('next');
+//   }
+//   // if (!req.session.user) {
+//   //   res.redirect('/login');
+//   // } else {
+//   //   res.sendFile('Public/index.html');
+//   // }
+// });
 
 //----------- user/pref & save pref -------------//
 
@@ -99,21 +120,6 @@ app.post('/login', function(req, res) {
       console.log('USER NOT FOUND.');
     }
   });
-});
-
-//-------------------------- ROOT -------------------------//
-app.use(function(req, res) {
-  console.log(req, 'RQQQQQQQQQ');
-  if (req.url === '/') {
-    console.log('why DONT YOU SEE MEE!!!!!!!!!!>!>>!HEREERERE');
-  } else {
-    console.log('next');
-  }
-  // if (!req.session.user) {
-  //   res.redirect('/login');
-  // } else {
-  //   res.sendFile('Public/index.html');
-  // }
 });
 
 //--------------------------SIGN UP---------------//
