@@ -4,9 +4,16 @@ class App extends React.Component {
     //Short hand for calling React.component.call(props)
     super(props);
 
+    //State defaults
     this.state = {
-      currency: 'Currency',
-      resolution: 'Resolution',
+      currency: {
+        text: 'Currency: BTC',
+        val: 'BTC'
+      },
+      resolution: {
+        test: 'Resolution: 10min',
+        val: 10
+      },
       synced: false
     };
   }
@@ -29,23 +36,11 @@ class App extends React.Component {
 
   componentDidMount() {
     console.log('It mounted');
-    this.props.initGraph();
+    this.props.graph.init();
   }
 
-
-  // logout(callback) {
-  //   console.log('Logging out now');
-
-  //   $.ajax({
-  //     url: 'http://localhost:3000/logout',
-  //     method: 'GET',
-  //     success: (data) => console.log('logged out'),
-  //     error: (error) => console.log('An error occurred!: ', error)
-  //   });
-  // }
-
   savePrefs(callback) {
-    console.log('Saving prefs now', this.state.prefs);
+    console.log('Saving prefs now', this.state);
 
     var context = this;
 
@@ -53,14 +48,38 @@ class App extends React.Component {
       url: 'http://localhost:3000/users/preferences',
       method: 'POST',
       data: {
-        prefs: JSON.stringify(this.state.prefs)
+        prefs: JSON.stringify(this.state)
       },
       success: (data) => callback(data),
       error: (error) => console.log('An error occurred!: ', error)
     });
   }
 
+  getPrefs() {
+    console.log('Saving prefs now', this.state);
+
+    var context = this;
+
+    $.ajax({
+      url: 'http://localhost:3000/users/preferences',
+      method: 'GET',
+      success: (data) => callback(data),
+      error: (error) => console.log('An error occurred!: ', error)
+    });
+  }
+
   currencyHandler(curr) {
+
+    //change the state: triggers the button text to change
+    this.setState({
+      currency: {
+        text: 'Currency: ' + curr,
+        val: curr
+      }
+    });
+
+    //Pass the state into our change axis function from dataStream.js
+    this.props.
     console.log(curr);
   }
 
@@ -87,7 +106,7 @@ class App extends React.Component {
           <NavBar logout={this.logout} savePrefs={this.savePrefs.bind(this)} synced={this.synced.bind(this)} />
         </div>
         <div className="col-md-8">    
-          <Main currencyState={this.state.currency} resState={this.state.resolution} currHandler={this.currencyHandler} resHandler={this.resHandler}/>
+          <Main currencyState={this.state.currency.text} resState={this.state.resolution.text}. currHandler={this.currencyHandler} resHandler={this.resHandler}/>
         </div>
       </div>
     );

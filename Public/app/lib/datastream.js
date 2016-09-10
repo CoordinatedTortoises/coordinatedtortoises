@@ -166,4 +166,10 @@ var rescaleAxis = function(currency) {
 
 };
 
-window.initGraph = initGraph;
+window.graph = {
+
+  init: initGraph,
+  rescale: rescaleAxis,
+  clear: clearGraph
+
+};

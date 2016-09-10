@@ -12,7 +12,7 @@ var Main = ({currencyState, resState, currHandler, resHandler}) => (
           {currencyState}<span className="caret"></span>
         </button>
         <ul className="dropdown-menu">
-          <li><a onClick={() => currHandler('btc')}>Bitcoin (BTC)</a></li>
+          <li><a onClick={() => currHandler('BTC')}>Bitcoin (BTC)</a></li>
           <li><a onClick={() => currHandler('usd')}>US Dollars ($)</a></li>
           <li><a onClick={() => currHandler('jpy')}>Japanese Yen (¥)</a></li>
         </ul>
