@@ -18,7 +18,8 @@
 
 var PythonShell = require('python-shell');
 var bitcoin = require('bitcoinjs-lib');
-
+var request = require('request');
+var blockchain = require('blockchain.info');
 
 
 //UrlList should similar to [{url: "https://mkt.21.co/21dotco/zip_code_data/zipdata/collect?zip_code=94109"}, {url:"https://mkt.21.co/21dotco/extract_links/web_links/collect?url=https://21.co"}]
@@ -41,6 +42,12 @@ var checkCost21Services = function(urlList, callback){
   });
 };
 
+var receiveNotifs = function(BIP32pub) {
+  //This function will hopefully be able to allow users to get notifications for their transactions
+  var getNotifs = new bitcoin.Receive(BIP32pub, /* Where we are going to receive the notifications for each transaction */ 'http://localhost:8000/r/notifs', 'API KEY WILL GO HERE');
+}
+
+
 //Want to print an easy way for people to make transactions to copy and paste into the block chain
 // bitcoin.Block.calculateMerkleRoot(transaction) //calcutates the merkleRoot of a transaction
 var sendMoney = function(prevTxID, payee, amount, callback, network, outputIndex) {
@@ -60,19 +67,24 @@ var sendMoney = function(prevTxID, payee, amount, callback, network, outputIndex
   tx.addOutput(payee, amount);
   return function(secp256k1Key) {
     tx.sign(0, secp256k1Key);
-    callback(tx.build().toHex());
+    if (callback) {
+      callback(tx.build().toHex());
+    } else {
+      //Automatically pushes the build to the blockchain
+      blockchain.pushtx.pushtx(tx.build().toHex());
+    }
   };
   //The resulting hex still needs to be copied and pasted into the blockchain inputter on https://blockchain.info/pushtx
 };
 
 // --------------EXAMPLES-----------
 /*
-
 var txId = 'aa94ab02c182214f090e99a0d57021caffd0f195a81c24602b1028b130b63e31';
 var outputAddr = "1Gokm82v6DmtwKEB8AiVhm82hyFSsEvBDK";
 var privateKeyWIF = 'L1uyy5qTuGrVXrmrsvHWHgVzW9kKdrp27wBC7Vs6nZDTF2BRUVwy'
 var keyPair = bitcoin.ECPair.fromWIF(privateKeyWIF);
-sendMoney(txId, outputAddr, 500, console.log)(keyPair);
+sendMoney(txId, outputAddr, 500, blockchain.pushtx.pushtx)(keyPair);
+
 
 
 
@@ -100,7 +112,7 @@ console.log(tx.build().toHex())
 //Example Usage: 
 // checkCost([{url: "https://mkt.21.co/21dotco/zip_code_data/zipdata/collect?zip_code=94109"}, {url:"https://mkt.21.co/21dotco/extract_links/web_links/collect?url=https://21.co"}], console.log);
 module.exports = {
-  checkCost: checkCost,
+  checkCost: checkCost21Services,
   sendMoney: sendMoney
 };
 
