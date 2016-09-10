@@ -12,7 +12,7 @@ class App extends React.Component {
       },
       resolution: {
         text: 'Resolution: 10min',
-        val: 10
+        val: 'all'
       },
       exchange: {},
       synced: false
@@ -80,7 +80,7 @@ class App extends React.Component {
     $.ajax({
       url: 'https://blockchain.info/ticker?cors=true',
       method: 'GET',
-      success: (data) => callback((data)),
+      success: (data) => callback(data),
       error: (error) => console.log('An error occurred!: ', error)
     });
   }
@@ -95,9 +95,13 @@ class App extends React.Component {
       }
     });
 
-    //Pass the state into our change axis function from dataStream.js
-    
-    this.getExchange((data) => console.log(data));
+    //get the current exchange rates, then pass to rescale
+    this.getExchange((data) => {
+      this.setState({
+        exchange: data
+      });
+      this.props.graph.rescale(curr, data);
+    });
     //this.props.graph.rescale(curr);
     console.log(this, curr);
   }
@@ -111,31 +115,18 @@ class App extends React.Component {
         val: res
       }
     });
-
-
-
   }
 
 
 
   render() {
     return (
-      //Write JSX here, and passing down important props, like top level methods
-      //Components:
-        //Side bar nav
-          //Save Prefs
-          //LogOut
-        //Main view
-          //Graph 1
-          //Settings for it
-
-          //Props are given as attributes
       <div className="target">
         <div className="col-md-4">    
           <NavBar logout={this.logout} savePrefs={this.savePrefs.bind(this)} synced={this.synced.bind(this)} />
         </div>
         <div className="col-md-8">    
-          <Main currencyState={this.state.currency.text} resState={this.state.resolution.text} currHandler={this.currencyHandler.bind(this)} resHandler={this.resHandler.bind(this)}/>
+          <Main currencies={this.props.currencies} currencyState={this.state.currency.text} resState={this.state.resolution.text} currHandler={this.currencyHandler.bind(this)} resHandler={this.resHandler.bind(this)}/>
         </div>
       </div>
     );

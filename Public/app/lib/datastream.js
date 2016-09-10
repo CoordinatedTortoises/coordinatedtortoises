@@ -1,95 +1,99 @@
-//this file will contain d3 related methods, and will expose the live data
-var initGraph = function () {
- 
-  var graphOptions = {
-    width: '100%',
-    height: 500
-  };
+//These have to be available to each function
+var socketURI = 'ws://localhost:4000';
+var bucketCount = 0;
+var sumIn = 0;
+var firstBool = true;
+var volumeData = [];
+//Defaults
+var currentCurrency = 'BTC';
+var timeRes = 10;
+var convert = 1;
 
-  //This was taken from mike bostock's example graph
+//All the graph related stuff must be held in the top level too
+var graphOptions = {
+  width: '100%',
+  height: 500
+};
 
-  var margin = {top: 20, right: 20, bottom: 30, left: 50};
-  var width = 790 - margin.left - margin.right;
-  var height = 500 - margin.top - margin.bottom;
+//This was taken from mike bostock's example graph
 
-  var formatDate = d3.time.format('%d-%b-%y');
+var margin = {top: 20, right: 20, bottom: 30, left: 50};
+var width = 790 - margin.left - margin.right;
+var height = 500 - margin.top - margin.bottom;
 
-  var x = d3.time.scale()
-      .range([0, width]);
+var formatDate = d3.time.format('%d-%b-%y');
 
-  var y = d3.scale.linear()
-      .range([height, 0]);
+var x = d3.time.scale()
+    .range([0, width]);
 
-  var xAxis = d3.svg.axis()
-      .scale(x)
-      .orient('bottom');
+var y = d3.scale.linear()
+    .range([height, 0]);
 
-  var yAxis = d3.svg.axis()
-      .scale(y)
-      .orient('left');
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient('bottom');
 
-  var line = d3.svg.line()
-      .x(function(d) { return x(d.date); })
-      .y(function(d) { return y(d.btc); });
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient('left');
 
-  //Initialize the svg graph
+var line = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.btc); });
+
+var render = function(data) {
+
   var svg = d3.select('.main-graph').append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
     .append('g')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  var render = function(data) {
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain(d3.extent(data, function(d) { return d.btc; }));
 
-    x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain(d3.extent(data, function(d) { return d.btc; }));
+  svg.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis);
 
-    svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(xAxis);
+  svg.append('g')
+      .attr('class', 'y axis')
+      .call(yAxis)
+    .append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 6)
+      .attr('dy', '.71em')
+      .style('text-anchor', 'end')
+      .text('Volume (BTC)');
 
-    svg.append('g')
-        .attr('class', 'y axis')
-        .call(yAxis)
-      .append('text')
-        .attr('transform', 'rotate(-90)')
-        .attr('y', 6)
-        .attr('dy', '.71em')
-        .style('text-anchor', 'end')
-        .text('Volume (BTC)');
+  svg.append('path')
+      .attr('class', 'line')
+      .attr('d', line(data));
+};
 
-    svg.append('path')
-        .attr('class', 'line')
-        .attr('d', line(data));
-  };
+var update = function(data, dur) {
 
-  var update = function(data) {
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+  y.domain(d3.extent(data, function(d) { return d.btc; }));
 
-    x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain(d3.extent(data, function(d) { return d.btc; }));
+  var trans = d3.select('body').transition();
 
-    var trans = d3.select('body').transition();
+  trans.select('.x.axis').duration(dur).ease('linear').call(xAxis);
+  trans.select('.y.axis').duration(dur).ease('linear').call(yAxis);
 
-    trans.select('.x.axis').duration(3000).ease('linear').call(xAxis);
-    trans.select('.y.axis').duration(3000).ease('linear').call(yAxis);
-
-    trans.select('.line').duration(3000).ease('linear').attr('d', line(data));
-  };
+  trans.select('.line').duration(dur).ease('linear').attr('d', line(data));
+};
 
 
-
-  var socketURI = 'ws://localhost:4000';
-  var bucketCount = 0;
-  var sumIn = 0;
-  var firstBool = true;
-  var volumeData = [];
+var initGraph = function () {
 
   var processData = function(data) {
-
+    //Convert
     data.time = new Date(data.time);
+    data.bc = data.bc * convert;
 
-    //Should only evaulate once
+    //Should only evaluate once
     if (!bucketCount) {
       bucketCount = data.time;
     }
@@ -100,7 +104,7 @@ var initGraph = function () {
     } else {
 
       //Add to volume data
-      //console.log(sumIn);
+      console.log(sumIn);
       volumeData.push({
         btc: sumIn,
         date: data.time
@@ -108,7 +112,7 @@ var initGraph = function () {
 
       //Rerender graph
       if (!firstBool) {
-        update(volumeData);
+        update(volumeData, 3000);
       }
 
       //Reset variables
@@ -136,6 +140,7 @@ var initGraph = function () {
     }
   };
 
+  //For each event the websocket pushes to us, we call the processing flow
   var initSocket = function() {
 
     var bitsocket = new WebSocket(socketURI);
@@ -160,9 +165,29 @@ var clearGraph = function() {
 
 };
 
-var rescaleAxis = function(currency) {
+var rescaleAxis = function(currency, exchange) {
 
+  //To handle the default case
+  exchange.BTC = {
+    last: 1
+  };
+  convert = exchange[currency].last;
 
+  console.log('Changing to: ', currency, 'Exchange data: ', exchange);
+  //Convert each data point
+  volumeData.forEach(function(dataPoint) {
+    dataPoint.btc = dataPoint.btc / exchange[currentCurrency].last;
+    dataPoint.btc = dataPoint.btc * exchange[currency].last;
+  });
+
+  //Update global var
+  currentCurrency = currency;
+
+  //Call update
+  update(volumeData, 100);
+
+  //Change the axis label
+  d3.select('.y.axis > text').text('Volume (' + exchange[currency].symbol + ')');
 
 };
 

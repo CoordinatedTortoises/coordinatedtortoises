@@ -1,7 +1,7 @@
 //ES6 makes you expose things to the window, similar to in Node
 
 //Stateless components don't even have to be declared as a React Component, and ES6 syntax makes them look super clean
-var Main = ({currencyState, resState, currHandler, resHandler}) => (
+var Main = ({currencies, currencyState, resState, currHandler, resHandler}) => (
   <div className="panel panel-primary">
     <div className="panel-heading"> Current Trading Values</div>
     <div className="panel-body main-graph">
@@ -12,9 +12,7 @@ var Main = ({currencyState, resState, currHandler, resHandler}) => (
           {currencyState}<span className="caret"></span>
         </button>
         <ul className="dropdown-menu">
-          <li><a onClick={() => currHandler('BTC')}>Bitcoin (BTC)</a></li>
-          <li><a onClick={() => currHandler('USD')}>US Dollars ($)</a></li>
-          <li><a onClick={() => currHandler('JPY')}>Japanese Yen (¥)</a></li>
+          {_.map(currencies, (currency, key) => <li key={currency}><a onClick={() => currHandler(key)}>{currency}</a></li>)}
         </ul>
       </div>
       <div className="btn-group user-pref">
@@ -25,11 +23,16 @@ var Main = ({currencyState, resState, currHandler, resHandler}) => (
           <li><a onClick={() => resHandler(1)}>1 min</a></li>
           <li><a onClick={() => resHandler(5)}>5 min</a></li>
           <li><a onClick={() => resHandler(10)}>10 min</a></li>
+          <li><a onClick={() => resHandler('all')}>Since stream connection</a></li>
         </ul>
       </div>
     </div>
   </div>
 );
+
+// <li><a onClick={() => currHandler('BTC')}>Bitcoin (BTC)</a></li>
+// <li><a onClick={() => currHandler('USD')}>US Dollars ($)</a></li>
+// <li><a onClick={() => currHandler('JPY')}>Japanese Yen (¥)</a></li>
 
 
 
