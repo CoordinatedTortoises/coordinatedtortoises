@@ -20,7 +20,7 @@ var PythonShell = require('python-shell');
 var bitcoin = require('bitcoinjs-lib');
 var request = require('request');
 var blockchain = require('blockchain.info');
-
+console.log(blockchain);
 /*
 IMPORTANT
 ALL BLOCKCHAIN FUNCTIONS AS LAST PARAM SHOULD INCLUDE AN API CODE
@@ -51,8 +51,18 @@ var checkCost21Services = function(urlList, callback){
 
 var receiveNotifs = function(BIP32pub) {
   //This function will hopefully be able to allow users to get notifications for their transactions
+  //This function is still in development
   var getNotifs = new bitcoin.Receive(BIP32pub, /* Where we are going to receive the notifications for each transaction */ 'http://localhost:8000/r/notifs', 'API KEY WILL GO HERE');
 };
+
+var convertToUSD = function(satoshis, callback) {
+  //currently not working as expected
+  blockchain.exchange.toBTC(satoshis, 'USD').then(function(USD) {
+    callback(USD);
+  });
+};
+
+
 
 var getUnspent = function(address, callback) {
   blockchain.blockexplorer.getUnspentOutputs('1Gokm82v6DmtwKEB8AiVhm82hyFSsEvBDK'/* We need to add an API key here in an object */).then(function(unspent) {
@@ -66,6 +76,8 @@ var getExchangeRates = function (callback) {
     callback(rates);
   });
 }
+
+// getExchangeRates(console.log);
 //Want to print an easy way for people to make transactions to copy and paste into the block chain
 // bitcoin.Block.calculateMerkleRoot(transaction) //calcutates the merkleRoot of a transaction
 var sendMoney = function(prevTxID, payee, amount, callback, network, outputIndex) {
