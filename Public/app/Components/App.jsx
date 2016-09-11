@@ -1,89 +1,171 @@
 class App extends React.Component {
+
+  //What happens on instantiation
   constructor(props) {
 
     //Short hand for calling React.component.call(props)
     super(props);
 
+    //State defaults
     this.state = {
-      prefs: {
-        testData: 'blah blah blah',
-        displayBitcoins: true
+      currency: {
+        text: 'Currency: BTC',
+        val: 'BTC'
+      },
+      resolution: {
+        text: 'Resolution: all',
+        val: 'all'
+      },
+      exchange: {
+        BTC: {
+          last: 1,
+          symbol: 'BTC'
+        }
       },
       synced: false
     };
   }
 
-  //Define class methods here. A couple ones used in the sprint were rendering and lifecycle events
-  //render is necessary to display the JSX supplied to the DOM!
-  //componenetDidMount is called once for every
+  //componenetDidMount is called once for the very first render
+  componentDidMount() {
+    console.log('It mounted: ', this.props);
 
+    //Set state must be async? When passing this.state instead of data it the old defaults
+    this.getPrefs((data) => {
+      this.setState(data);
+      this.props.graph.init(data);
+    });
+    //this.props.graph.init(this.state);
+  }
+
+  //Used to visually display a successful save
   synced() {
     this.setState({
       synced: true
     });
 
-    setTimeout(3000, function() {
+    console.log(setTimeout);
+
+    setTimeout(function() {
+      console.log(this.state);
       this.setState({
         synced: false
       });
-    }.bind(this));
-  }
-
-  componentDidMount() {
-    console.log('It mounted');
-    this.props.initGraph();
+    }.bind(this), 3000);
   }
 
 
-  // logout(callback) {
-  //   console.log('Logging out now');
 
-  //   $.ajax({
-  //     url: 'http://localhost:3000/logout',
-  //     method: 'GET',
-  //     success: (data) => console.log('logged out'),
-  //     error: (error) => console.log('An error occurred!: ', error)
-  //   });
-  // }
-
+  //AJAX Methods
   savePrefs(callback) {
-    console.log('Saving prefs now', this.state.prefs);
+    console.log('Saving prefs now', this.state);
 
     var context = this;
 
     $.ajax({
       url: 'http://localhost:3000/users/preferences',
       method: 'POST',
-      data: {
-        prefs: JSON.stringify(this.state.prefs)
-      },
+      data: JSON.stringify(this.state),
       success: (data) => callback(data),
       error: (error) => console.log('An error occurred!: ', error)
     });
   }
 
-  serverReqs() {}
+
+
+  getPrefs(callback) {
+    console.log('Getting prefs now', this.state);
+
+    var context = this;
+
+    //This is a mock for simulating the AJAX call until its working
+    callback({
+      currency: {
+        text: 'Currency: USD',
+        val: 'USD'
+      },
+      resolution: {
+        text: 'Resolution: 1min',
+        val: 1
+      },
+      exchange: {
+        BTC: {
+          last: 1,
+          symbol: 'BTC'
+        },
+        USD: {
+          last: 660,
+          symbol: '$'
+        }
+      },
+      synced: false
+    });
+
+    //DONT DELETE THIS, WE NEED IT LATER *******************************
+    //
+    // $.ajax({
+    //   url: 'http://localhost:3000/users/preferences',
+    //   method: 'GET',
+    //   success: (data) => callback(JSON.parse(data)),
+    //   error: (error) => console.log('An error occurred!: ', error)
+    // });
+    //******************************************************************
+  }
+
+
+
+  getExchange(callback) {
+    //use blockchain api to get most up to date exchange prices
+    $.ajax({
+      url: 'https://blockchain.info/ticker?cors=true',
+      method: 'GET',
+      success: (data) => callback(data),
+      error: (error) => console.log('An error occurred!: ', error)
+    });
+  }
+
+  currencyHandler(curr) {
+
+    //change the state: triggers the button text to change
+    this.setState({
+      currency: {
+        text: 'Currency: ' + curr,
+        val: curr
+      }
+    });
+
+    //get the current exchange rates, then pass to rescale
+    this.getExchange((data) => {
+      this.setState({
+        exchange: data
+      });
+      this.props.graph.rescale(curr, data);
+    });
+  }
+
+  resHandler(res) {
+    console.log(this, res);
+
+    this.setState({
+      resolution: {
+        text: 'Resolution: ' + res + 'min',
+        val: res
+      }
+    });
+
+    this.props.graph.updateRes(res);
+  }
 
 
 
   render() {
     return (
-      //Write JSX here, and passing down important props, like top level methods
-      //Components:
-        //Side bar nav
-          //Save Prefs
-          //LogOut
-        //Main view
-          //Graph 1
-          //Settings for it
-
-          //Props are given as attributes
       <div className="target">
         <div className="col-md-4">    
-          <NavBar logout={this.logout} savePrefs={this.savePrefs.bind(this)} synced={this.synced.bind(this)} />
+          <NavBar logout={this.logout} savePrefs={this.savePrefs.bind(this)} synced={this.synced.bind(this)} syncState={this.state.synced} />
         </div>
         <div className="col-md-8">    
-          <Main />
+          <Main currencies={this.props.currencies} currencyState={this.state.currency.text} resState={this.state.resolution.text} currHandler={this.currencyHandler.bind(this)} resHandler={this.resHandler.bind(this)}/>
         </div>
       </div>
     );

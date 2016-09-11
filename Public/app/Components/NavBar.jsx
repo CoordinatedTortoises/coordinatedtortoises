@@ -1,7 +1,7 @@
 //ES6 makes you expose things to the window, similar to in Node
 
 //Stateless components don't even have to be declared as a React Component, and ES6 syntax makes them look super clean
-var NavBar = ({logout, savePrefs, synced}) => (
+var NavBar = ({logout, savePrefs, synced, syncState}) => (
 
   <div className="panel panel-primary height-full">
     <div className="panel-heading"> Your Crypto-currency Dashboard</div>
@@ -11,8 +11,10 @@ var NavBar = ({logout, savePrefs, synced}) => (
           Try interacting with the ticker graphs on the right! In your account, you can customize your 
           dashboard view any way you like, and save those preferences so that you see them each time you log in. 
         </span>
-        <button className="btn btn-default" onClick={() => window.location ='/login'}>Logout</button>
-        <button className="btn btn-default" onClick={() => savePrefs(synced)}>Save Your Preferences</button>
+        <button className="btn btn-default" onClick={() => window.location = '/login'}>Logout</button>
+        <button className="btn btn-default" onClick={() => savePrefs(synced)}>Save Your Preferences
+          <span className={syncState ? 'label label-success' : 'hide'}>Success</span>
+        </button>
       </div>
     </div>
     <div className="panel-footer">
@@ -25,6 +27,5 @@ var NavBar = ({logout, savePrefs, synced}) => (
 
 window.NavBar = NavBar;
 
-//onClick={() => savePrefs(synced)}
 
 
