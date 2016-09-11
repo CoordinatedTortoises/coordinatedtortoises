@@ -44,6 +44,7 @@ var draw = function() {
 
 };
 
+// loc = [longitude, latitude]
 var addLocation = function(loc) {
 
   var projection = d3.geo.patterson()
