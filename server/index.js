@@ -31,51 +31,40 @@ app.use(function printSession(req, res, next) {
   return next();
 });
 
+var restrict = function(req, res, next) {
+  console.log('Inside restrict: ', req.session, '___');
+  if (req.session.user) {
+    console.log('OPTION 1~~~~~');
+    next();
+  } else {
+    console.log('OPTION 2 !!!!!!!!!!!!!!!');
+    req.session.error = 'Access denied';
+    res.redirect('/login');
+  }
+
+  // db.checkUser(req.session.username, req.session.password, function(found) {
+  //   if (found) {
+  //     next();
+  //   } else {
+  //     res.redirect('/login');
+  //   }
+  // });
+};
+
+//app.use(restrict);
+
 //serve static assets
 app.use(express.static('Public'));
 
-// var restrict = function(req, res, next) {
-//   console.log('Inside restrict: ', req.session, '___');
-//   if (req.session.user && req.session.pw) {
-//     console.log('OPTION 1~~~~~');
-//     next();
-//   } else {
-//     console.log('OPTION 2 !!!!!!!!!!!!!!!');
-//     req.session.error = 'Access denied';
-//     //res.redirect('/login');
-//   }
-
-//   // db.checkUser(req.session.username, req.session.password, function(found) {
-//   //   if (found) {
-//   //     next();
-//   //   } else {
-//   //     res.redirect('/login');
-//   //   }
-//   // });
-// };
-
 //-------------------------- ROOT -------------------------//
-app.get('/', function(req, res) {
-  if (!req.session.user) {
-    res.redirect('/login');
-  } else {
-    res.redirect('/');
-  }
+app.all('/', restrict, function(req, res) {
+  // if (!req.session.user) {
+  //   res.redirect('/login');
+  // } else {
+  //   res.redirect('/');
+  // }
+  res.sendFile(path.resolve('Public/index.html'));
 });
-
-// app.use(path, function(req, res) {
-//   console.log(req, 'RQQQQQQQQQ');
-//   if (req.url === '/') {
-//     console.log('why DONT YOU SEE MEE!!!!!!!!!!>!>>!HEREERERE');
-//   } else {
-//     console.log('next');
-//   }
-//   // if (!req.session.user) {
-//   //   res.redirect('/login');
-//   // } else {
-//   //   res.sendFile('Public/index.html');
-//   // }
-// });
 
 //----------- user/pref & save pref -------------//
 
