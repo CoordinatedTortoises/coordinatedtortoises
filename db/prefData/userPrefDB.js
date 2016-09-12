@@ -4,7 +4,14 @@
 
 // https://github.com/dresende/node-orm2
 // https://launchschool.com/blog/how-to-install-postgresql-on-a-mac
-var url = require('./config/psqlconfig.js');
+
+try {
+  var url = require('./config/psqlconfig.js');
+}
+catch(err) {
+  var url = process.env.URL;
+}
+
 var Sequelize = require('sequelize');
 var usersModel = require('./users.js');
 var bcrypt = require('bcrypt');
