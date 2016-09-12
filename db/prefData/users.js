@@ -5,6 +5,7 @@ module.exports = function(db) {
     username: {type: Sequelize.STRING, primaryKey: true},
     password: Sequelize.STRING,
     salt: Sequelize.STRING,
-    preferences: Sequelize.BLOB
+    preferences: Sequelize.STRING(10000)
   });
 };
+
