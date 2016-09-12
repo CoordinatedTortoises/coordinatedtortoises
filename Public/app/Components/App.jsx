@@ -146,7 +146,7 @@ class App extends React.Component {
           <Main currencies={this.props.currencies} currencyState={this.state.currency.text} resState={this.state.resolution.text} currHandler={this.currencyHandler.bind(this)} resHandler={this.resHandler.bind(this)}/>
           <WorldMap />
           <Transactions />
-          <Exchanges />
+          <Exchanges currencies={this.props.currencies} currHandler={this.currencyHandler.bind(this)} currencyState={this.state.currency.text}/>
         </div>
       </div>
     );
