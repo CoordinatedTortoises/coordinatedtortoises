@@ -4,8 +4,9 @@ class Exchanges extends React.Component {
   componentDidMount() {
     window.updateExchangeRates();
     setTimeout(function(){
+      console.log('updated exchange rates');
       window.updateExchangeRates();
-    }, 1000 * 60 * 15);
+    }, 1000 * 60 * 1);
   }
 
   // Renders a very simple panel that will contain the exchange rate
