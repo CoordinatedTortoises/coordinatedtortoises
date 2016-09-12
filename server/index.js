@@ -110,6 +110,14 @@ app.post('/users/preferences', restrict, function(req, res) {
     res.status(200).send();
   });
 });
+
+//------------------------ TX data --------------------//
+
+app.get('/tx', function(req, res) {
+
+});
+
+
 //------------------------LOGIN--------------------//
 //done.
 app.get('/login', function(req, res) {

@@ -25,7 +25,7 @@ class Transactions extends React.Component {
           total += txUO[unspent]['value'];
         };
         $('.unspent').append('<tr><td>NA</td><th>' + total + ' Total Satoshi' + '</th><td>NA</td></tr>');
-      })
+      });
     });
   }
 
@@ -33,7 +33,7 @@ class Transactions extends React.Component {
     return (
       <div className="panel panel-primary">
         <div className="panel-heading">Transactions</div>
-        <div className="panel-body">
+        <div className="panel-body txs">
         Find all transactions to an address
           <div className="form-group">
             <textarea className="form-control address" rows="2"></textarea>
