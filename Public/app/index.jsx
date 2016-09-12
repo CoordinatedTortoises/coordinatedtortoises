@@ -2,6 +2,8 @@
 
 //var crypto = crypt;
 
+
+//All the currencies we are tracking
 var currencies = {
 
   'BTC': 'Bitcoin (BTC)',

@@ -1,10 +1,15 @@
 class TxMaker extends React.Component {
-
+  //Upon render, it adds a click handler to a button
   componentDidMount() {
     $('.sendTx').on('click', function(){
+      //Empties out previous results from the last transaction.
       $('#results').empty();
       var data = {};
+      //The data is what we're sending to the server
       var shouldSend = true;
+      //Should Send is only true if we end up with valid data to send
+      
+      //If the transaction id is empty, we can't send it, so it adds an error class to that input
       if($('#inputTxId').val() !== ''){
         data['txId'] = $('#inputTxId').val();
         $('#itiDiv').removeClass('has-error');
@@ -12,6 +17,7 @@ class TxMaker extends React.Component {
         shouldSend = false;
         $('#itiDiv').addClass('has-error');
       }
+      //If the transaction output is empty, we can't send it, so it adds an error class to the output field
       if($('#output').val() !== ''){
         data['output'] = $('#output').val();
         $('#oDiv').removeClass('has-error');
@@ -20,8 +26,10 @@ class TxMaker extends React.Component {
         $('#oDiv').addClass('has-error');
       }
 
+      //Tells us whether or not the WIF key is already encrypted
       data['EncryptKey'] = $('#shouldEnc').is(':checked');
 
+      //Does the same thing as above
       if($('#privKey').val() !== ''){
         data['privKey'] = $('#privKey').val();
         $('#pkDiv').removeClass('has-error');
@@ -30,7 +38,11 @@ class TxMaker extends React.Component {
         $('#pkDiv').addClass('has-error');
       }
 
-      data['amount'] = $('#amount').val() || 0;
+      //I couldn't make it so the amount field would turn red if not filled, so I set to 0 as a default
+      data['amount'] = $('#amount').val() === '' ? $('#amount').val() : 0;
+      
+
+      //If it's ok to send the data, it sends it to the server and builds it and pushes it to the blockchain
       if(shouldSend){ 
         $.post('http://localhost:3000/txmake', data, function(tx){ 
           $('#results').append('<span class="bg-success">' + tx + '</span>');
@@ -41,6 +53,7 @@ class TxMaker extends React.Component {
     });
   }
 
+  //Renders a bunch of forms and a button to send them
   render() {
     return (
       <div className="panel panel-primary">
@@ -48,7 +61,7 @@ class TxMaker extends React.Component {
           <div className="panel-body">
             <div className="form-group" id='itiDiv'>
               <div className="col-sm-10">
-                <input type="text" className="form-control" id="inputTxId" placeholder="Input Tx Id"></input>
+                <input type="text" className="form-control" id="inputTxId" placeholder="Input Tx ID"></input>
               </div>
             </div>
             <div className="form-group" id='oDiv'>
@@ -83,4 +96,5 @@ class TxMaker extends React.Component {
 
 };
 
+//Sets Transaction maker to the window as TxMaker
 window.TxMaker = TxMaker;
