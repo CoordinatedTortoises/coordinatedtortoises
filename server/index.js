@@ -48,7 +48,7 @@ app.use(session({
 }));
 
 app.use(function printSession(req, res, next) {
-  console.log('A SESSION: ', req.session);
+  //console.log('A SESSION: ', req.session);
   return next();
 });
 
@@ -63,51 +63,38 @@ var restrict = function(req, res, next) {
     res.redirect('/login');
   }
 
-  // db.checkUser(req.session.username, req.session.password, function(found) {
-  //   if (found) {
-  //     next();
-  //   } else {
-  //     res.redirect('/login');
-  //   }
-  // });
 };
-
-//app.use(restrict);
-
-//serve static assets
-app.use(express.static('Public'));
 
 //-------------------------- ROOT -------------------------//
 app.all('/', restrict, function(req, res) {
-  // if (!req.session.user) {
-  //   res.redirect('/login');
-  // } else {
-  //   res.redirect('/');
-  // }
   res.sendFile(path.resolve('Public/index.html'));
 });
 
-
 //------------------------- Exchange Rates --------------//
-
-
 app.get('/exchange', function(req, res){
   res.send(JSON.stringify(rates.getExchangeRates()));
 });
 
+//serve static assets (behind the wall)
+app.use(express.static('Public'));
 
 //----------- user/pref & save pref -------------//
 
 //find a pref as soon as log in, send them back to show on page
-app.get('/users/preferences', /*restrict,*/ function(req, res) {
-  db.findUserByUsername(req.session.username, function(user) {
+app.get('/users/preferences', restrict, function(req, res) {
+  console.log('Inside get route to prefs', req.session.user);
+  db.findUserByUsername(req.session.user, function(user) {
+    console.log('Found users prefs: ', user.preferences);
     res.status(200).send(JSON.stringify(user.preferences));
   });
 });
 
 //update user's pref
 app.post('/users/preferences', restrict, function(req, res) {
-  db.savePref(req.session.username, req.body.preferences, function() {
+  //Note: this is hacky... try to fix this next team!
+  console.log('Saving prefs now: ', Object.keys(req.body)[0]);
+  db.savePref(req.session.user, Object.keys(req.body)[0], function(data) {
+    console.log(data);
     res.status(200).send();
   });
 });
@@ -138,33 +125,26 @@ app.post('/login', function(req, res) {
   var un = req.body.username;
   var pw = req.body.password;
 
-  // req.session.regenerate(function() {
-  //   req.session.user = un;
-  //   req.session.pw = pw;
-  //   res.redirect('/');
-  // });
-
   db.checkUser(un, pw, function(check) {
     if (check) {
       req.session.regenerate(function() {
-        console.log('USER FOUND:', un, pw);
+        console.log('USER FOUND: ', un, pw);
         req.session.user = un;
         res.redirect('/');  
       });
     } else {
       console.log('USER NOT FOUND.');
+      res.redirect('/signup');
     }
   });
 });
 
 //--------------------------SIGN UP---------------//
-//done.
 app.get('/signup', function(req, res) {
   console.log('now at sign up page');
   res.sendFile(path.resolve('Public/signup.html'));
 });
 
-//done.
 app.post('/signup', function(req, res) {
   var un = req.body.username;
   var pw = req.body.password;
@@ -174,7 +154,7 @@ app.post('/signup', function(req, res) {
     } else {
       req.session.regenerate(function() {
         req.session.user = un;
-        res.redirect('/login');
+        res.redirect('/');
       });
     }
   });
@@ -202,7 +182,6 @@ app.post('/txmake', function(req, res) {
 });
 
 //--------------------------- LOGOUT --------------//
-//done.
 app.get('/logout', function(req, res) {
   req.session.destroy(function() {
     res.redirect('/login');

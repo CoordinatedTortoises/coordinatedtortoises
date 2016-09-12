@@ -26,16 +26,17 @@ class App extends React.Component {
     };
   }
 
+
   //componenetDidMount is called once for the very first render
   componentDidMount() {
     console.log('It mounted: ', this.props);
 
     //Set state must be async? When passing this.state instead of data it the old defaults
     this.getPrefs((data) => {
-      this.setState(data);
-      this.props.graph.init(data);
+      console.log(JSON.parse(data));
+      this.setState(JSON.parse(data));
+      this.props.graph.init(JSON.parse(data));
     });
-    //this.props.graph.init(this.state);
   }
 
   //Used to visually display a successful save
@@ -78,38 +79,12 @@ class App extends React.Component {
 
     var context = this;
 
-    //This is a mock for simulating the AJAX call until its working
-    callback({
-      currency: {
-        text: 'Currency: USD',
-        val: 'USD'
-      },
-      resolution: {
-        text: 'Resolution: 1min',
-        val: 1
-      },
-      exchange: {
-        BTC: {
-          last: 1,
-          symbol: 'BTC'
-        },
-        USD: {
-          last: 660,
-          symbol: '$'
-        }
-      },
-      synced: false
+    $.ajax({
+      url: 'http://localhost:3000/users/preferences',
+      method: 'GET',
+      success: (data) => callback(JSON.parse(data)),
+      error: (error) => console.log('An error occurred!: ', error)
     });
-
-    //DONT DELETE THIS, WE NEED IT LATER *******************************
-    //
-    // $.ajax({
-    //   url: 'http://localhost:3000/users/preferences',
-    //   method: 'GET',
-    //   success: (data) => callback(JSON.parse(data)),
-    //   error: (error) => console.log('An error occurred!: ', error)
-    // });
-    //******************************************************************
   }
 
 
@@ -155,8 +130,6 @@ class App extends React.Component {
 
     this.props.graph.updateRes(res);
   }
-
-
 
   render() {
     return (
