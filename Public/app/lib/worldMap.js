@@ -16,8 +16,8 @@ var draw = function() {
   var graticule = d3.geo.graticule();
 
   var map = d3.select(".main-map").append("svg")
-      .attr("width", width)
-      .attr("height", height)
+      .attr("viewBox", "0 0 " + width + " " + height)
+      .attr("preserveAspectRatio", "xMinYMin meet")
       .attr("class", "worldMap");
 
     map.append("path")
