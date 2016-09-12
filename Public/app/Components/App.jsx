@@ -73,7 +73,7 @@ class App extends React.Component {
   }
 
 
-
+  //Gets the preferences from the user
   getPrefs(callback) {
     console.log('Getting prefs now', this.state);
 
@@ -88,7 +88,7 @@ class App extends React.Component {
   }
 
 
-
+  //Gets the most recent data on the exchange rates
   getExchange(callback) {
     //use blockchain api to get most up to date exchange prices
     $.ajax({
@@ -99,6 +99,7 @@ class App extends React.Component {
     });
   }
 
+  //Changes the currency we are currently looking at
   currencyHandler(curr) {
 
     //change the state: triggers the button text to change
@@ -118,6 +119,7 @@ class App extends React.Component {
     });
   }
 
+  //Handles how long into the past we are seeing
   resHandler(res) {
     console.log(this, res);
 
@@ -131,6 +133,9 @@ class App extends React.Component {
     this.props.graph.updateRes(res);
   }
 
+
+  //Renders the graph to the page
+  //Along with the buttons which define preferences
   render() {
     return (
       <div className="target">
