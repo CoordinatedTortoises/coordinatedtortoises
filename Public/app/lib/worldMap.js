@@ -15,7 +15,7 @@ var draw = function() {
 
   var graticule = d3.geo.graticule();
 
-  var map = d3.select(".main-graph").append("svg")
+  var map = d3.select(".main-map").append("svg")
       .attr("width", width)
       .attr("height", height)
       .attr("class", "worldMap");
@@ -47,18 +47,17 @@ var draw = function() {
 // loc = [longitude, latitude]
 var addLocation = function(loc) {
 
-  var projection = d3.geo.patterson()
-      .scale(153)
-      .translate([width / 2, height / 2])
-      .precision(0.1);
-
     var coords = projection(loc);
 
     d3.select(".worldMap").append('svg:circle')
         .attr('cx', coords[0])
         .attr('cy', coords[1])
-        .attr('r', 2.5)
+        .attr('r', 1.5)
         .attr('fill', 'red');
 
 };
 
+window.worldMap = {
+  draw: draw,
+  add: addLocation
+};
