@@ -1,2 +1,2 @@
-//replace 'OUR URL' with a link that talks to a domain thing.
+//replace 'OUR URL' with a link that allows access into the psql db
 module.exports = 'OUR URL';

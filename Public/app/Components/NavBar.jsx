@@ -24,7 +24,7 @@ var NavBar = ({logout, savePrefs, synced, syncState}) => (
   </div>
 
 );
-
+//This is the navbar on the left side of the screen which contains the transaction maker and a way to save user preferences
 
 window.NavBar = NavBar;
 
