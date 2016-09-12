@@ -11,8 +11,7 @@ var helpers = require('./paycoin/bitcoinHelpers.js');
 var connect = require('./utils/connect.js');
 var rates = require('./workers/exchangeRates.js');
 
-<<<<<<< 9b97e7eb6180bf046c5c2dede27cba3863a150f7
-=======
+
 //users, 
 //users/preferences, login, signup,
 // restrict function for sessions
@@ -29,7 +28,7 @@ login,
 
 */
 
->>>>>>> Created a way to view exchange rates for currencies
+
 //-------- SERVER & SOCKET SET UP ----------//
 var app = express();
 //var server = require('http').createServer(app);
