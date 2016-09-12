@@ -64,7 +64,7 @@ var convertToUSD = function(satoshis, callback) {
 
 
 var getUnspent = function(address, callback) {
-  blockchain.blockexplorer.getUnspentOutputs('1Gokm82v6DmtwKEB8AiVhm82hyFSsEvBDK'/* We need to add an API key here in an object */).then(function(unspent) {
+  blockchain.blockexplorer.getUnspentOutputs(address/* We need to add an API key here in an object */).then(function(unspent) {
     callback(unspent);
   });
 };

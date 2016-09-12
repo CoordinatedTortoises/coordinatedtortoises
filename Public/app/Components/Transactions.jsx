@@ -25,7 +25,6 @@ class Transactions extends React.Component {
           total += txUO[unspent]['value'];
         };
         $('.unspent').append('<tr><td>NA</td><th>' + total + ' Total Satoshi' + '</th><td>NA</td></tr>');
-      })
     });
   }
 
