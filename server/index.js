@@ -9,6 +9,25 @@ var helpers = require('./paycoin/bitcoinHelpers.js');
 
 //var pete = require('./workers/serverSocket.js');
 var connect = require('./utils/connect.js');
+var rates = require('./workers/exchangeRates.js');
+
+
+//users, 
+//users/preferences, login, signup,
+// restrict function for sessions
+//init live data stream when hit before login
+// save , get user pref after login
+// when hit root open data stream to client.
+// authentication w/ sessions
+
+/*
+somewhat done: 
+server setup, 
+login, 
+/users/prefs, 
+
+*/
+
 
 //-------- SERVER & SOCKET SET UP ----------//
 var app = express();
@@ -66,6 +85,15 @@ app.all('/', restrict, function(req, res) {
   // }
   res.sendFile(path.resolve('Public/index.html'));
 });
+
+
+//------------------------- Exchange Rates --------------//
+
+
+app.get('/exchange', function(req, res){
+  res.send(JSON.stringify(rates.getExchangeRates()));
+});
+
 
 //----------- user/pref & save pref -------------//
 
