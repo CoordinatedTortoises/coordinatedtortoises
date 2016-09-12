@@ -4,7 +4,8 @@
   "description": "A personalized cryptocurrency stock ticker",
   "main": "index.js",
   "scripts": {
-    "test": "mocha specs/*.js"
+    "test": "mocha specs/*.js",
+    "start": "nodemon server/index.js"
   },
   "repository": {
     "type": "git",
