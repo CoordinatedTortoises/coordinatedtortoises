@@ -5,25 +5,9 @@ var mo = require('method-override');
 var db = require('../db/prefData/userPrefDB.js');
 var session = require('express-session');
 var path = require('path');
+//var FileStore = require('session-file-store')(session);
 //var pete = require('./workers/serverSocket.js');
 var connect = require('./utils/connect.js');
-
-console.log(db);
-//users, 
-//users/preferences, login, signup,
-// restrict function for sessions
-//init live data stream when hit before login
-// save , get user pref after login
-// when hit root open data stream to client.
-// authentication w/ sessions
-
-/*
-somewhat done: 
-server setup, 
-login, 
-/users/prefs, 
-
-*/
 
 //-------- SERVER & SOCKET SET UP ----------//
 var app = express();
@@ -58,6 +42,24 @@ app.get('/', restrict, function(req, res) {
   res.sendfile('Public/index.html');
 });
 
+app.use(session({
+  secret: 'secret'
+}));
+
+
+
+// var restrict = function(req, res, next) {
+//   console.log('Inside restrict: ', req.session);
+//   if (req.session.username && req.session.password) {
+//     next();  
+//   } else {
+//     res.redirect('/login');
+//   }
+// };
+app.use(function printSession(req, res, next) {
+  console.log('A SESSION: ', req.session);
+  return next();
+});
 
 //----------- user/pref & save pref -------------//
 
@@ -74,7 +76,6 @@ app.post('/users/preferences', restrict, function(req, res) {
     res.status(200).send();
   });
 });
-
 //------------------------LOGIN--------------------//
 
 app.get('/login', function(req, res) {
@@ -84,18 +85,26 @@ app.get('/login', function(req, res) {
 
 //new user submitted, add new user to db
 app.post('/login', function(req, res) {
-  console.log(req.body);
+  //console.log(req.body);
+  var un = req.body.username;
+  var pw = req.body.password;
 
-  db.findOne(db.users, req.body, function(err, newUser) {
+  db.findOne(db.users, req.body, function(newUser, err) {
     if (err) {
-      console.log('error in adding new user: ', err);
+      console.log('error in finding user: ', err);
       res.redirect('/signup');
     } else {
-      //console.log("The new user", newUser);
+      console.log(newUser);
       if (newUser) {
-        req.session.username = req.body.username;
-        req.session.password = req.body.password;
-        res.redirect('/');
+        req.session.regenerate(function(err) {
+          if (err) {
+            console.log('err in starting session: ', err);
+          } else {
+            req.session.username = un;
+            req.session.password = pw;
+            res.redirect('/');    
+          }
+        });
       } else {
         res.redirect('/signup');
       }
@@ -112,7 +121,7 @@ app.get('/signup', function(req, res) {
 app.post('/signup', function(req, res) {
   //check how to access in req the username and pw, store in var
   //add new user to db
-  db.add(db.users, req.body, function(err, newUser) {
+  db.add(db.users, req.body, function(newUser, err) {
     if (err) {
       console.log('Error: ', err);
     } else {
@@ -122,14 +131,26 @@ app.post('/signup', function(req, res) {
   });
 });
 
+//-------------------------- ROOT -------------------------//
+app.get('/', function(req, res) {
+  if (!req.session.username && !req.session.pw) {
+    console.log('redirecting to log in');
+    res.redirect('/login');  
+  } else {
+    res.sendfile(path.resolve('../Public/index.html'));  
+  }
+});
+
 //--------------------------- LOGOUT --------------//
 
 app.get('/logout', function(req, res) {
   req.session.destroy(function() {
     res.redirect('/login');
   });
-  //res.redirect('/login');
 });
+
+//serve static assets
+app.use(express.static('../Public'));
 
 app.listen(3000, function() {
   console.log('server listening at port 3000');
