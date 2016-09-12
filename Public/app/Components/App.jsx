@@ -26,6 +26,7 @@ class App extends React.Component {
     };
   }
 
+
   //componenetDidMount is called once for the very first render
   componentDidMount() {
     console.log('It mounted: ', this.props);
