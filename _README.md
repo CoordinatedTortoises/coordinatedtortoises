@@ -1,6 +1,6 @@
 # Project Name
 
-> Pithy project description
+> Crypto currency tracker and basic info
 
 ## Team
 
@@ -25,7 +25,7 @@
 ## Requirements
 
 - Node 0.10.x
-- Redis 2.6.x
+- RethinkDB
 - Postgresql 9.1.x
 - etc
 - etc

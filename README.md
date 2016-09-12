@@ -1,6 +1,6 @@
 # Project Name
 
-> Pithy project description
+> Crypto currency stock tracker
 
 ## Team
 
@@ -20,7 +20,7 @@
 
 ## Usage
 
-> Some usage instructions
+> ```npm start``` from the root directory and 
 
 ## Requirements
 

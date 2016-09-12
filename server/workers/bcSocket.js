@@ -2,6 +2,7 @@ var WebSocket = require('ws');
 var events = require('events');
 var bcSocketUrl = 'wss://ws.blockchain.info/inv';
 
+//Creates a new class called BitCoinWebSocket
 var BitCoinWebSocket = function(url) {
   WebSocket.call(this, url);
 
