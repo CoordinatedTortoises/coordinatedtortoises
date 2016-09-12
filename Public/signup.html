@@ -22,22 +22,31 @@
 </head>
 <body>
 
-  <h2>Sign up</h2>
-  <form action="/signup" method="post">
-      <div>
-        <label for="username">Username:</label>
-        <input id="username" type="text" name="username">
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading"> Signup </div>
+      <div class="panel-body"> 
+        <form action="/signup" method="post">
+            <div>
+              <label for="username">Username:</label>
+              <input id="username" type="text" name="username">
+            </div>
+            <div>
+              <label for="password">Password:</label>
+              <input id="password" type="password" name="password">
+            </div>
+            <div>
+              <input type="submit" value="Sign up">
+            </div>
+        </form>
       </div>
-      <div>
-        <label for="password">Password:</label>
-        <input id="password" type="password" name="password">
+      <div class="panel-footer">
+        Already have an account? Login <a href="/login">here</a>
       </div>
-      <div>
-        <input type="submit" value="Sign up">
-      </div>
-  </form>
+    </div>
+  </div>
 
-  <script src="compiled/app/lib/datastream.js"></script>
+
 
 </body>
 </html>
