@@ -9,6 +9,7 @@ var updateExchangeRates = function(){
       url: 'http://localhost:3000/exchange',
       method: 'GET',
       success: (data) => {
+        $('exRates').empty();
         var rates = JSON.parse(data);
         $('.exRates').append('<h3 class="text-center">Rates per 1 Ƀ</h3><br>');
         $('.exRates').append('<table class="table exData"><tr><th>Currency</th><th>Buy Rate</th><th>Sell Rate</th></table>');
