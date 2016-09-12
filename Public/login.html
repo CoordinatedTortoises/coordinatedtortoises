@@ -21,20 +21,30 @@
 </head>
 <body>
 
-  <h2>Login</h2>
-  <form action="/login" method="post">
-      <div>
-        <label for="username">Username:</label>
-        <input id="username" type="text" name="username">
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading"> Login </div>
+      <div class="panel-body"> 
+        <form action="/login" method="post">
+            <div>
+              <label for="username">Username:</label>
+              <input id="username" type="text" name="username">
+            </div>
+            <div>
+              <label for="password">Password:</label>
+              <input id="password" type="password" name="password">
+            </div>
+            <div>
+              <input type="submit" value="Login">
+            </div>
+        </form>
       </div>
-      <div>
-        <label for="password">Password:</label>
-        <input id="password" type="password" name="password">
+      <div class="panel-footer">
+        Sign up for an account <a href="/signup">here</a>
       </div>
-      <div>
-        <input type="submit" value="Login">
-      </div>
-  </form>
+    </div>
+  </div>
+
 
 </body>
 </html>
