@@ -160,6 +160,14 @@ var initGraph = function (prefs) {
     }
   };
 
+  var cleanCoords = function(data) {
+    if (data.coords.length === 0) {
+      return [];
+    } else {
+      return [data.coords[1], data.coords[0]];
+    }
+  };
+
   //For each event the websocket pushes to us, we call the processing flow
   var initSocket = function() {
 
@@ -173,6 +181,26 @@ var initGraph = function (prefs) {
     bitsocket.onmessage = function(event) {
       //console.log('New event recieved: ', event.data.slice(0, 200));
       getInputs(JSON.parse(event.data));
+
+      event = JSON.parse(event.data);
+
+      if (Array.isArray(event)) {
+
+        event.forEach(function(item) {
+          var coord = cleanCoords(item);
+
+          if (coord.length > 0) {
+            window.worldMap.add(coord);
+          }
+        });
+      } else {
+          var coord = cleanCoords(event);
+
+          if (coord.length > 0) {
+            window.worldMap.add(coord);
+          }
+      }
+
     };
 
   };
