@@ -5,6 +5,7 @@ var mo = require('method-override');
 var db = require('../db/prefData/userPrefDB.js');
 var session = require('express-session');
 var path = require('path');
+var helpers = require('./paycoin/bitcoinHelpers.js');
 
 //var pete = require('./workers/serverSocket.js');
 var connect = require('./utils/connect.js');
@@ -132,6 +133,27 @@ app.post('/signup', function(req, res) {
       });
     }
   });
+});
+
+//--------------------------- Tx Maker ------------ //
+
+app.post('/txmake', function(req, res) {
+  var key = req.body.privKey;
+  if(req.body.EncryptKey) {
+    key = helpers.encryptKey(req.body.privKey);
+  }
+  if(key === false){
+    res.send('Incorrect Private Key Format');
+  } else {
+    helpers.sendMoney(req.body.txId, req.body.output, Number(req.body.amount), function(hex) {
+      try {
+        helpers.pushToBC(hex);
+        res.send(hex);
+      } catch (err) {
+        res.send('Pushing To Blockchain Failed' + err);
+      }
+    })(key);
+  }
 });
 
 //--------------------------- LOGOUT --------------//

@@ -20,7 +20,6 @@ var PythonShell = require('python-shell');
 var bitcoin = require('bitcoinjs-lib');
 var request = require('request');
 var blockchain = require('blockchain.info');
-console.log(blockchain);
 /*
 IMPORTANT
 ALL BLOCKCHAIN FUNCTIONS AS LAST PARAM SHOULD INCLUDE AN API CODE
@@ -76,6 +75,19 @@ var getExchangeRates = function (callback) {
     callback(rates);
   });
 }
+
+var encryptKey = function(WIFkey) {
+  try {
+    return bitcoin.ECPair.fromWIF(WIFkey);
+  }
+  catch (err) {
+    return false;
+  }
+};
+
+var pushToBC = function(hex) {
+  blockchain.pushtx.pushtx(hex);
+};
 
 // getExchangeRates(console.log);
 //Want to print an easy way for people to make transactions to copy and paste into the block chain
@@ -142,6 +154,8 @@ console.log(tx.build().toHex())
 //Example Usage: 
 // checkCost([{url: "https://mkt.21.co/21dotco/zip_code_data/zipdata/collect?zip_code=94109"}, {url:"https://mkt.21.co/21dotco/extract_links/web_links/collect?url=https://21.co"}], console.log);
 module.exports = {
+  pushToBC: pushToBC,
+  encryptKey: encryptKey,
   checkCost: checkCost21Services,
   sendMoney: sendMoney,
   getExchangeRates: getExchangeRates,
