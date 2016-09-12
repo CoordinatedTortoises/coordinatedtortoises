@@ -6,6 +6,7 @@ var NavBar = ({logout, savePrefs, synced, syncState}) => (
   <div className="panel panel-primary height-full">
     <div className="panel-heading"> Your Crypto-currency Dashboard</div>
     <div className="panel-body">
+      <TxMaker />
       <div className="btn-group-vertical" role="group" aria-label="...">
         <span className="text"> 
           Try interacting with the ticker graphs on the right! In your account, you can customize your 
