@@ -21,10 +21,11 @@ class Transactions extends React.Component {
         var txUO = trans.unspent_outputs;
         var total = 0;
         for (var unspent in txUO) {
-          $('.unspent').append('<tr><td><small>' + txUO[unspent]['tx_hash'] + '</small></td><td>' + txUO[unspent]['value'] + ' Satoshi </td><td>' + txUO[unspent]['confirmations'] + '</td></tr>');
+          $('.unspent').append('<tr><td><small>' + txUO[unspent]['tx_hash'] + '</small></td><td>' + txUO[unspent]['value'] + ' ㋛</td><td>' + txUO[unspent]['confirmations'] + '</td></tr>');
           total += txUO[unspent]['value'];
         };
-        $('.unspent').append('<tr><td>NA</td><th>' + total + ' Total Satoshi' + '</th><td>NA</td></tr>');
+        $('.unspent').append('<tr><td>-</td><th>' + total + ' Total ㋛' + '</th><td>-</td></tr>');
+      });
     });
   }
 
