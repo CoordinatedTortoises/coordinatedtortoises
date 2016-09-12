@@ -8,7 +8,7 @@ var url = require('./config/psqlconfig.js');
 var Sequelize = require('sequelize');
 var usersModel = require('./users.js');
 var bcrypt = require('bcrypt');
-var sequelize = new Sequelize(url,  {
+var sequelize = new Sequelize(url, {
   dialect: 'postgres',
   dialectOptions: {
     ssl: true
@@ -81,7 +81,7 @@ var deleteOne = function(model, params, callback) {
   });
 };
 
-var changePass = function(model, username, oldPass, newPass, callback){
+var changePass = function(model, username, oldPass, newPass, callback) {
   model.update({password: newPass}, {
     where: {
       username: username,
@@ -90,12 +90,16 @@ var changePass = function(model, username, oldPass, newPass, callback){
   }).then(callback);
 };
 
-
-
 var newUser = function(username, password, callback) {
-  bcrypt.genSalt(5, function(err, salt){
+  bcrypt.genSalt(5, function(err, salt) {
+    if (err) {
+      throw err;
+    }
     console.log(salt);
-    bcrypt.hash(password, salt, function(err, hashP){
+    bcrypt.hash(password, salt, function(err, hashP) {
+      if (err) {
+        throw err;
+      }
       sequelize.models.users.findOrCreate({
         where: {
           username: username,
@@ -107,6 +111,8 @@ var newUser = function(username, password, callback) {
     });
   });
 };
+
+
 
 var checkUser = function(username, password, callback) {
   findUserByUsername(username, function(user){
@@ -130,14 +136,15 @@ var savePref = function(username, preferences, callback) {
 // add(user, {id:3, username:'stevo', password:'pass'}, console.log);
 // findAll(user, function(user){
 //   console.log(user[1].dataValues);
+
 // add(users, {id:3, username:'stevo', password:'pass'}, console.log);
 // findAll(users, function(users){
 //   console.log(users[1].dataValues);
 // });
 // deleteAll(user, console.log);
 
+//newUser('ti', 'p', console.log);
 
-//findAll(sequelize.models.users, console.log);
 
 module.exports = {
   users: sequelize.models.users,
@@ -152,5 +159,7 @@ module.exports = {
   add: add,
   newUser: newUser,
   checkUser: checkUser,
-  savePref: savePref
+  savePref: savePref,
+  findUserByUsername: findUserByUsername,
+  newUser: newUser
 };
