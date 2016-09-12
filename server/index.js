@@ -10,6 +10,7 @@ var helpers = require('./paycoin/bitcoinHelpers.js');
 //var pete = require('./workers/serverSocket.js');
 var connect = require('./utils/connect.js');
 var rates = require('./workers/exchangeRates.js');
+var helpers = require('./paycoin/bitcoinHelpers.js');
 
 
 //users, 
@@ -114,7 +115,15 @@ app.post('/users/preferences', restrict, function(req, res) {
 //------------------------ TX data --------------------//
 
 app.get('/tx', function(req, res) {
-
+  for (var address in req.query) {
+    if (address.length > 26 && address.length < 35) {
+      helpers.getUnspent(address, function(tx){
+        res.send(JSON.stringify(tx));
+      });
+    } else {
+      res.end();
+    }
+  }
 });
 
 
