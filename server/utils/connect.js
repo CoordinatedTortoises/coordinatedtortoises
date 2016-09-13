@@ -52,6 +52,7 @@ wss.newConnection(function(ws) {
   var tenMinutesAgo = Date.now() - 60 * 10 * 1000;
 
   db.readHistoricalData('bitcoinData', tenMinutesAgo, function(err, results) {
+    console.log(results);
     ws.send(JSON.stringify(results));
   });
 

@@ -141,6 +141,7 @@ class App extends React.Component {
       <div className="target">
         <div className="col-md-4">    
           <NavBar logout={this.logout} savePrefs={this.savePrefs.bind(this)} synced={this.synced.bind(this)} syncState={this.state.synced} />
+          <TxMaker />
         </div>
         <div className="col-md-8">    
           <Main currencies={this.props.currencies} currencyState={this.state.currency.text} resState={this.state.resolution.text} currHandler={this.currencyHandler.bind(this)} resHandler={this.resHandler.bind(this)}/>
