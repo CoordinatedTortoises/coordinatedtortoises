@@ -5,6 +5,7 @@ window.exchangeData = {};
 //Update exchangeRates queries our server for the current exchange rate data and appends it within the panel for transactions.
 //It's called every minute by the componentDidMount of exchanges.jsx
 var updateExchangeRates = function(){
+  $('.exRates').empty();
   $.ajax({
       url: 'http://localhost:3000/exchange',
       method: 'GET',

@@ -179,7 +179,7 @@ var initGraph = function (prefs) {
       console.log('There was an error: ', e);
     };
     bitsocket.onmessage = function(event) {
-      //console.log('New event recieved: ', event.data.slice(0, 200));
+      console.log('New event recieved: ', event.data);
       getInputs(JSON.parse(event.data));
 
       event = JSON.parse(event.data);
